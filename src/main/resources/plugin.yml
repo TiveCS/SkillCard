@@ -1,0 +1,10 @@
+name: SkillCard
+version: '1.0.0'
+main: com.github.tivecs.skillcard.SkillCardPlugin
+api-version: '1.20'
+author: 'TiveCS'
+
+commands:
+  skillcard:
+    aliases: ['sc', 'scard']
+    description: 'Main command for SkillCard plugin'

@@ -1,6 +1,3 @@
 package com.github.tivecs.skillcard.core.triggers
 
-enum class TriggerResult {
-    EXECUTED,
-    CONDITION_NOT_MET;
-}
+data class TriggerResult<TAttribute>(val state: TriggerExecuteResultState, val attributes: TAttribute?)

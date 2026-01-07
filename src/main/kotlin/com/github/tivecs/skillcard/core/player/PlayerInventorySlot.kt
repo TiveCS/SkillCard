@@ -1,22 +1,18 @@
 package com.github.tivecs.skillcard.core.player
 
-import com.github.tivecs.skillcard.core.books.Book
-import org.bukkit.inventory.ItemStack
+import com.github.tivecs.skillcard.core.books.SkillBook
+import com.github.tivecs.skillcard.internal.data.tables.PlayerInventorySlotTable
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.dao.UUIDEntity
+import org.jetbrains.exposed.v1.dao.UUIDEntityClass
+import java.util.*
 
-class PlayerInventorySlot {
+class PlayerInventorySlot(id: EntityID<UUID>) : UUIDEntity(id) {
+    companion object : UUIDEntityClass<PlayerInventorySlot>(PlayerInventorySlotTable)
 
-    val index: Int
-    var skillBook: Book? = null
-    val locked: Boolean
+    var slotIndex by PlayerInventorySlotTable.slotIndex
+    var locked by PlayerInventorySlotTable.locked
+    var bookId by PlayerInventorySlotTable.bookId
 
-    constructor(slotIndex: Int, locked: Boolean, skillBook: Book?) {
-        this.index = slotIndex
-        this.skillBook = skillBook
-        this.locked = locked
-    }
-
-    // TODO: return skill book item if exists / equipped
-    fun getSkillBookItem(): ItemStack? {
-        return skillBook?.getItem()
-    }
+    var inventory by PlayerInventory referencedOn PlayerInventorySlotTable.inventory
 }

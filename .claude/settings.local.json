@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(unzip:*)",
+      "Bash(gradle clean:*)",
+      "WebSearch",
+      "Bash(git add:*)"
+    ]
+  }
+}

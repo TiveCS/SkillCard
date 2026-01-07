@@ -3,24 +3,28 @@ package com.github.tivecs.skillcard.builtin.triggers
 import com.github.tivecs.skillcard.core.triggers.Trigger
 import com.github.tivecs.skillcard.core.triggers.TriggerExecuteResultState
 import com.github.tivecs.skillcard.core.triggers.TriggerResult
-import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Projectile
 import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.entity.EntityDamageEvent
-import kotlin.collections.emptyMap
 
-data class OnAttackTriggerAttribute(
+data class OnAttackedTriggerAttribute(
     val attacker: LivingEntity,
-    val event: EntityDamageByEntityEvent)
+    val defender: LivingEntity,
+    val event: EntityDamageByEntityEvent
+)
 
-object OnAttackTrigger : Trigger<EntityDamageByEntityEvent, OnAttackTriggerAttribute> {
-    override val identifier: String = "on_attack"
+object OnAttackedTrigger : Trigger<EntityDamageByEntityEvent, OnAttackedTriggerAttribute> {
+    override val identifier: String = "on_attacked"
 
-    override fun execute(event: EntityDamageByEntityEvent): TriggerResult<OnAttackTriggerAttribute> {
+    override fun execute(event: EntityDamageByEntityEvent): TriggerResult<OnAttackedTriggerAttribute> {
         val damager = event.damager
+        val defender = event.entity
 
         if (damager !is LivingEntity && damager !is Projectile) {
+            return TriggerResult(TriggerExecuteResultState.CONDITION_NOT_MET, null)
+        }
+
+        if (defender !is LivingEntity) {
             return TriggerResult(TriggerExecuteResultState.CONDITION_NOT_MET, null)
         }
 
@@ -36,7 +40,7 @@ object OnAttackTrigger : Trigger<EntityDamageByEntityEvent, OnAttackTriggerAttri
 
         return TriggerResult(
             TriggerExecuteResultState.EXECUTED,
-            OnAttackTriggerAttribute(actualDamager, event)
+            OnAttackedTriggerAttribute(actualDamager, defender, event)
         )
     }
 }

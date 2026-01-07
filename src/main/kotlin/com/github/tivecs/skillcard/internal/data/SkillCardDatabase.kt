@@ -1,16 +1,13 @@
 package com.github.tivecs.skillcard.internal.data
 
-import com.github.tivecs.skillcard.core.player.PlayerInventory
 import com.github.tivecs.skillcard.internal.config.SkillCardStorageConfig
 import com.github.tivecs.skillcard.internal.config.SkillCardStorageType
-import com.github.tivecs.skillcard.internal.data.tables.BookAbilityTable
-import com.github.tivecs.skillcard.internal.data.tables.BookTable
+import com.github.tivecs.skillcard.internal.data.tables.SkillBookTable
 import com.github.tivecs.skillcard.internal.data.tables.PlayerInventorySlotTable
 import com.github.tivecs.skillcard.internal.data.tables.PlayerInventoryTable
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
-import org.jetbrains.exposed.v1.migration.jdbc.MigrationUtils
 
 class SkillCardDatabase {
 
@@ -27,7 +24,7 @@ class SkillCardDatabase {
         }
     }
 
-    fun get(): Database {
+    fun connect(): Database {
         return when (config.type) {
             SkillCardStorageType.SQLITE -> Database.connect(getDatabaseUrl(), "org.sqlite.JDBC")
             SkillCardStorageType.MYSQL -> Database.connect(
@@ -40,12 +37,11 @@ class SkillCardDatabase {
     }
 
     fun migrate() {
-        get()
+        connect()
 
         transaction {
             SchemaUtils.create(
-                BookTable,
-                BookAbilityTable,
+                SkillBookTable,
                 PlayerInventoryTable,
                 PlayerInventorySlotTable,
                 inBatch = true

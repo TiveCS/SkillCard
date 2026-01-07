@@ -1,6 +1,7 @@
 package com.github.tivecs.skillcard.internal.config
 
 import org.bukkit.configuration.file.FileConfiguration
+import java.io.File
 
 enum class SkillCardStorageType {
     SQLITE,

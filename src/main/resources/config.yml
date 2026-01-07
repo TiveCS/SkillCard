@@ -3,7 +3,7 @@ storage:
   type: 'sqlite'
 
   sqlite:
-    database: 'data.db'
+    database: 'data.sqlite'
 
   mysql:
     host: 'localhost'

@@ -19,6 +19,8 @@ class SkillCardPlugin : JavaPlugin() {
         pluginConfig = SkillCardConfig(this)
         database = SkillCardDatabase(pluginConfig.storageConfig)
 
+        database.migrate()
+
         getCommand("skillcard")?.setExecutor(SkillCardCommand())
 
         Bukkit.getPluginManager().registerEvents(TriggerEventListener(), this)

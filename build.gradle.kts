@@ -29,6 +29,8 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:1.0.0-rc-4")
     implementation("org.jetbrains.exposed:exposed-jdbc:1.0.0-rc-4")
     implementation("org.jetbrains.exposed:exposed-dao:1.0.0-rc-4")
+    implementation("org.jetbrains.exposed:exposed-migration-core:1.0.0-rc-4")
+    implementation("org.jetbrains.exposed:exposed-migration-jdbc:1.0.0-rc-4")
 
     implementation("org.xerial:sqlite-jdbc:3.49.1.0")
     implementation("mysql:mysql-connector-java:8.0.33")

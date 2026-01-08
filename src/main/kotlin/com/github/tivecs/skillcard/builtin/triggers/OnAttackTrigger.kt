@@ -3,12 +3,9 @@ package com.github.tivecs.skillcard.builtin.triggers
 import com.github.tivecs.skillcard.core.triggers.Trigger
 import com.github.tivecs.skillcard.core.triggers.TriggerExecuteResultState
 import com.github.tivecs.skillcard.core.triggers.TriggerResult
-import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Projectile
 import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.entity.EntityDamageEvent
-import kotlin.collections.emptyMap
 
 data class OnAttackTriggerAttribute(
     val attacker: LivingEntity,

@@ -4,7 +4,9 @@
       "Bash(unzip:*)",
       "Bash(gradle clean:*)",
       "WebSearch",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)"
     ]
   }
 }

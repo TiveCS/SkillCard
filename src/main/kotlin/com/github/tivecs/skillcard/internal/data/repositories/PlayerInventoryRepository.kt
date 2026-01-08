@@ -2,6 +2,7 @@ package com.github.tivecs.skillcard.internal.data.repositories
 
 import com.github.tivecs.skillcard.SkillCardPlugin
 import com.github.tivecs.skillcard.core.player.PlayerInventory
+import com.github.tivecs.skillcard.core.player.PlayerInventorySlot
 import com.github.tivecs.skillcard.internal.data.tables.PlayerInventoryTable
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
@@ -11,18 +12,25 @@ object PlayerInventoryRepository {
     fun getOrCreate(playerId: UUID): PlayerInventory {
         SkillCardPlugin.database.connect()
 
-        var inventory: PlayerInventory
+        var inventory: PlayerInventory? = null
 
-        val founds = PlayerInventory.find { PlayerInventoryTable.playerId eq playerId }
+        transaction {
+            val founds = PlayerInventory.find { PlayerInventoryTable.playerId eq playerId }
 
-        if (!founds.empty())
-        {
-            inventory = founds.first()
-        }else {
-            inventory = PlayerInventory.new {
-                this.playerId = playerId
+            if (!founds.empty())
+            {
+                inventory = founds.first()
+            }else {
+                inventory = PlayerInventory.new {
+                    this.playerId = playerId
+                }
+
+                commit()
             }
         }
+
+        if (inventory == null)
+            throw NullPointerException("Inventory of player $playerId could not be found")
 
         return inventory
     }

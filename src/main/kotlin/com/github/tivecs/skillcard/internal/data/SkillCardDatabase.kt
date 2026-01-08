@@ -5,13 +5,17 @@ import com.github.tivecs.skillcard.internal.config.SkillCardStorageType
 import com.github.tivecs.skillcard.internal.data.tables.SkillBookTable
 import com.github.tivecs.skillcard.internal.data.tables.PlayerInventorySlotTable
 import com.github.tivecs.skillcard.internal.data.tables.PlayerInventoryTable
+import com.github.tivecs.skillcard.internal.data.tables.SkillAbilityTable
+import com.github.tivecs.skillcard.internal.data.tables.SkillTable
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.migration.jdbc.MigrationUtils
 
 class SkillCardDatabase {
 
     val config: SkillCardStorageConfig
+    private lateinit var database: Database
 
     constructor(storageConfig: SkillCardStorageConfig) {
         config = storageConfig
@@ -25,7 +29,11 @@ class SkillCardDatabase {
     }
 
     fun connect(): Database {
-        return when (config.type) {
+        if (::database.isInitialized) {
+            return database
+        }
+
+        database = when (config.type) {
             SkillCardStorageType.SQLITE -> Database.connect(getDatabaseUrl(), "org.sqlite.JDBC")
             SkillCardStorageType.MYSQL -> Database.connect(
                 getDatabaseUrl(),
@@ -34,6 +42,8 @@ class SkillCardDatabase {
                 password = config.password as String
             )
         }
+
+        return database
     }
 
     fun migrate() {
@@ -41,10 +51,11 @@ class SkillCardDatabase {
 
         transaction {
             SchemaUtils.create(
+                SkillTable,
+                SkillAbilityTable,
                 SkillBookTable,
                 PlayerInventoryTable,
-                PlayerInventorySlotTable,
-                inBatch = true
+                PlayerInventorySlotTable
             )
         }
     }

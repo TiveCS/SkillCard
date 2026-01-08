@@ -16,6 +16,7 @@ import com.github.tivecs.skillcard.internal.data.repositories.AbilityRepository
 import com.github.tivecs.skillcard.internal.data.repositories.TriggerRepository
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
+import org.jetbrains.exposed.v1.jdbc.Database
 
 class SkillCardPlugin : JavaPlugin() {
 

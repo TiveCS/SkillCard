@@ -1,16 +1,34 @@
 package com.github.tivecs.skillcard.core.player
 
-import com.github.tivecs.skillcard.internal.data.tables.PlayerInventorySlotTable
-import com.github.tivecs.skillcard.internal.data.tables.PlayerInventoryTable
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
-import org.jetbrains.exposed.v1.dao.UUIDEntity
-import org.jetbrains.exposed.v1.dao.UUIDEntityClass
-import java.util.*
+import org.bukkit.entity.Player
+import java.util.UUID
 
-class PlayerInventory(id: EntityID<UUID>) : UUIDEntity(id) {
-    companion object : UUIDEntityClass<PlayerInventory>(PlayerInventoryTable)
+class PlayerInventory(val inventoryId: UUID, val playerId: UUID, slotDataList: List<PlayerInventorySlot> = emptyList()) {
 
-    var playerId by PlayerInventoryTable.playerId
+    val slots: MutableMap<Int, PlayerInventorySlot> = mutableMapOf(
+        *slotDataList.map { slotData -> slotData.slotIndex to slotData }.toTypedArray()
+    )
 
-    val slots by PlayerInventorySlot referrersOn PlayerInventorySlotTable.inventory orderBy PlayerInventorySlotTable.slotIndex
+    fun equip(slot: Int, bookId: UUID) {
+        val slotData = this.slots[slot] ?: PlayerInventorySlot(UUID.randomUUID(), inventoryId, slot)
+
+        slots[slot] = slotData
+
+        if (slotData.bookId != null) {
+            return
+        }
+
+        slotData.bookId = bookId
+    }
+
+    fun unequip(slot: Int, executor: Player?) {
+        val slotData = slots[slot]
+
+        if (slotData == null || slotData.bookId == null)
+            return
+
+        if (executor == null)
+            return
+    }
+
 }

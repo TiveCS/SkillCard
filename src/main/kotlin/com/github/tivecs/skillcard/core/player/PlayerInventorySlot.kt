@@ -1,18 +1,25 @@
 package com.github.tivecs.skillcard.core.player
 
 import com.github.tivecs.skillcard.core.books.SkillBook
-import com.github.tivecs.skillcard.internal.data.tables.PlayerInventorySlotTable
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
-import org.jetbrains.exposed.v1.dao.UUIDEntity
-import org.jetbrains.exposed.v1.dao.UUIDEntityClass
-import java.util.*
+import java.util.UUID
 
-class PlayerInventorySlot(id: EntityID<UUID>) : UUIDEntity(id) {
-    companion object : UUIDEntityClass<PlayerInventorySlot>(PlayerInventorySlotTable)
+class PlayerInventorySlot {
 
-    var slotIndex by PlayerInventorySlotTable.slotIndex
-    var locked by PlayerInventorySlotTable.locked
-    var bookId by PlayerInventorySlotTable.bookId
+    val slotId: UUID
+    val inventoryId: UUID
+    val slotIndex: Int
 
-    var inventory by PlayerInventory referencedOn PlayerInventorySlotTable.inventory
+    var locked: Boolean = false
+    var bookId: UUID? = null
+
+    var book: SkillBook? = null
+    lateinit var inventory: PlayerInventory
+
+    constructor(slotId: UUID, inventoryId: UUID, slotIndex: Int) {
+        this.slotId = slotId
+        this.inventoryId = inventoryId
+        this.slotIndex = slotIndex
+        bookId = null
+    }
+
 }

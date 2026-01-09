@@ -1,6 +1,5 @@
 package com.github.tivecs.skillcard.cmds
 
-import com.github.tivecs.skillcard.core.player.PlayerInventory
 import com.github.tivecs.skillcard.internal.data.repositories.PlayerInventoryRepository
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.command.Command
@@ -35,6 +34,6 @@ class SkillCardCommand : CommandExecutor {
             return true
         }
 
-        return true
+        return false
     }
 }

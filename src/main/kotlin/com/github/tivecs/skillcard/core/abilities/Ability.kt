@@ -1,6 +1,6 @@
 package com.github.tivecs.skillcard.core.abilities
 
-interface Ability<TAttribute> {
+interface Ability<TAttribute> where TAttribute : Class<*> {
 
     val identifier: String
 

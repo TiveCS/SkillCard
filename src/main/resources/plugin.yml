@@ -8,3 +8,7 @@ commands:
   skillcard:
     aliases: ['sc', 'scard']
     description: 'Main command for SkillCard plugin'
+
+  skillcardadmin:
+    aliases: ['sca', 'scadmin']
+    description: 'SkillCard command for admin'

@@ -1,44 +1,87 @@
 package com.github.tivecs.skillcard.internal.data.repositories
 
-import com.github.tivecs.skillcard.SkillCardPlugin
 import com.github.tivecs.skillcard.core.player.PlayerInventory
-import com.github.tivecs.skillcard.core.player.PlayerInventorySlot
+import com.github.tivecs.skillcard.internal.data.tables.PlayerInventorySlotTable
 import com.github.tivecs.skillcard.internal.data.tables.PlayerInventoryTable
 import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.jdbc.batchUpsert
+import org.jetbrains.exposed.v1.jdbc.insertReturning
+import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import java.util.*
 
 object PlayerInventoryRepository {
-    fun getOrCreate(playerId: UUID): PlayerInventory {
-        SkillCardPlugin.database.connect()
 
-        var inventory: PlayerInventory? = null
+    // Player ID, Inventory
+    private val cache = mutableMapOf<UUID, PlayerInventory>()
 
-        transaction {
-            val founds = PlayerInventory.find { PlayerInventoryTable.playerId eq playerId }
-
-            if (!founds.empty())
-            {
-                inventory = founds.first()
-            }else {
-                inventory = PlayerInventory.new {
-                    this.playerId = playerId
-                }
-
-                commit()
-            }
+    fun getOrCreate(playerId: UUID, fromCacheIfExists: Boolean = true): PlayerInventory {
+        if (fromCacheIfExists) {
+            val found = cache[playerId]
+            if (found != null) return found
         }
 
-        if (inventory == null)
-            throw NullPointerException("Inventory of player $playerId could not be found")
+        val found = PlayerInventoryTable.selectAll().where {
+            PlayerInventoryTable.playerId eq playerId
+        }.map {
+            PlayerInventory(
+                it[PlayerInventoryTable.id].value,
+                it[PlayerInventoryTable.playerId]
+            )
+        }.singleOrNull()
+
+        if (found != null) {
+            cache[playerId] = found
+            return found
+        }
+
+        val inventory: PlayerInventory = transaction {
+            return@transaction PlayerInventoryTable.insertReturning {
+                it[PlayerInventoryTable.playerId] = playerId
+            }.map {
+                PlayerInventory(it[PlayerInventoryTable.id].value, it[PlayerInventoryTable.playerId])
+            }.single()
+        }
+
+        cache[playerId] = inventory
 
         return inventory
     }
 
-    fun save(inventory: PlayerInventory) {
-        SkillCardPlugin.database.connect()
+    fun saveToDatabase(inventory: PlayerInventory) {
+        transaction {
+//            inventory.slots.forEach { (slotIndex, slotData) ->
+//                PlayerInventorySlotTable.upsert(
+//                    keys = arrayOf(PlayerInventorySlotTable.slotIndex, PlayerInventorySlotTable.inventoryId),
+//                    onUpdate = {
+//                        it[PlayerInventorySlotTable.locked] = slotData.locked
+//                        it[PlayerInventorySlotTable.bookId] = slotData.bookId
+//                    },
+//                ) {
+//                    it[PlayerInventorySlotTable.slotIndex] = slotIndex
+//                    it[PlayerInventorySlotTable.inventoryId] = slotData.inventoryId
+//                    it[PlayerInventorySlotTable.locked] = false
+//                    it[PlayerInventorySlotTable.bookId] = null
+//                }
+//            }
+            val slotsToUpsert = inventory.slots.map { (slotIndex, slotData) ->
+                slotIndex to slotData
+            }
 
-        inventory.storeWrittenValues()
+            PlayerInventorySlotTable.batchUpsert(
+                data = slotsToUpsert,
+                keys = arrayOf(PlayerInventorySlotTable.inventoryId, PlayerInventorySlotTable.slotIndex)
+            ) { (slotIndex, slotData) ->
+                this[PlayerInventorySlotTable.slotIndex] = slotIndex
+                this[PlayerInventorySlotTable.inventoryId] = slotData.inventoryId
+                this[PlayerInventorySlotTable.locked] = slotData.locked
+                this[PlayerInventorySlotTable.bookId] = slotData.bookId
+            }
+        }
+    }
+
+    fun invalidate(playerId: UUID) {
+        cache.remove(playerId)
     }
 
 }

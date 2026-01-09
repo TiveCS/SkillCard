@@ -8,8 +8,13 @@ import com.github.tivecs.skillcard.builtin.abilities.ShootProjectileAbility
 import com.github.tivecs.skillcard.builtin.abilities.ThunderAbility
 import com.github.tivecs.skillcard.builtin.triggers.OnAttackTrigger
 import com.github.tivecs.skillcard.builtin.triggers.OnAttackedTrigger
+import com.github.tivecs.skillcard.cmds.SkillCardAdminCommand
 import com.github.tivecs.skillcard.cmds.SkillCardCommand
+import com.github.tivecs.skillcard.core.player.PlayerEventListener
 import com.github.tivecs.skillcard.core.triggers.TriggerEventListener
+import com.github.tivecs.skillcard.gui.common.items.BorderGuiItem
+import com.github.tivecs.skillcard.gui.common.items.NextPageGuiItem
+import com.github.tivecs.skillcard.gui.common.items.PreviousPageGuiItem
 import com.github.tivecs.skillcard.internal.config.SkillCardConfig
 import com.github.tivecs.skillcard.internal.data.SkillCardDatabase
 import com.github.tivecs.skillcard.internal.data.repositories.AbilityRepository
@@ -17,6 +22,7 @@ import com.github.tivecs.skillcard.internal.data.repositories.TriggerRepository
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.jetbrains.exposed.v1.jdbc.Database
+import xyz.xenondevs.invui.gui.structure.Structure
 
 class SkillCardPlugin : JavaPlugin() {
 
@@ -35,8 +41,15 @@ class SkillCardPlugin : JavaPlugin() {
         database.migrate()
 
         getCommand("skillcard")?.setExecutor(SkillCardCommand())
+        getCommand("skillcardadmin")?.setExecutor(SkillCardAdminCommand())
 
-        Bukkit.getPluginManager().registerEvents(TriggerEventListener(), this)
+        val pluginManager = Bukkit.getPluginManager()
+        pluginManager.registerEvents(TriggerEventListener(), this)
+        pluginManager.registerEvents(PlayerEventListener(), this)
+
+        Structure.addGlobalIngredient('#', BorderGuiItem)
+        Structure.addGlobalIngredient('>', ::NextPageGuiItem)
+        Structure.addGlobalIngredient('<', ::PreviousPageGuiItem)
     }
 
     override fun onDisable() {

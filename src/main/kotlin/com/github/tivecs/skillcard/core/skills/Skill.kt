@@ -1,42 +1,63 @@
 package com.github.tivecs.skillcard.core.skills
 
 import com.cryptomorin.xseries.XMaterial
-import com.github.tivecs.skillcard.internal.data.tables.SkillTable
-import org.bukkit.ChatColor
+import com.github.tivecs.skillcard.internal.extensions.colorized
+import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
-import org.jetbrains.exposed.v1.core.dao.id.EntityID
-import org.jetbrains.exposed.v1.dao.UUIDEntity
-import org.jetbrains.exposed.v1.dao.UUIDEntityClass
-import java.util.*
+import java.util.UUID
 
-class Skill(id: EntityID<UUID>) : UUIDEntity(id) {
-    companion object : UUIDEntityClass<Skill>(SkillTable)
+class Skill {
 
-    var identifier = SkillTable.identifier
-    var displayName = SkillTable.displayName
-    var description = SkillTable.description
-    var material = SkillTable.material
+    val skillId: UUID
+    lateinit var identifier: String
+    lateinit var material: XMaterial
+    lateinit var displayName: String
+    lateinit var description: String
 
-    val item: ItemStack? get() {
-        val getMaterial = XMaterial.matchXMaterial(readValues[material])
+    val displayDescription get() = description.split("\n").map { it.trim().colorized() }
 
-        if (getMaterial.isEmpty) return null
+    // List of Abilities
+    val abilities = mutableListOf<SkillAbility>()
 
-        val mat = getMaterial.get()
+    constructor(skillId: UUID) {
+        this.skillId = skillId
+    }
 
-        val itemStack = mat.parseItem() ?: return null
+    fun execute() {
+        abilities.sortBy { ab -> ab.executionOrder }
+        abilities.forEach { ab -> ab.execute(ab) }
+    }
 
-        val meta = itemStack.itemMeta
+    fun getItem(): ItemStack {
+        val mat = material.get() ?: Material.BOOK
+        val item = ItemStack(mat)
+        val meta = item.itemMeta
 
-        meta?.setDisplayName(ChatColor.translateAlternateColorCodes('&', readValues[displayName]))
+        meta?.setDisplayName(displayName.colorized())
+        meta?.lore = displayDescription
 
-        val desc = readValues[description]
-        val descriptionList: List<String> = desc?.split("\n") ?: emptyList()
+        item.itemMeta = meta
 
-        meta?.lore = descriptionList.map { str -> ChatColor.translateAlternateColorCodes('&', str) }
+        return item
+    }
 
-        itemStack.itemMeta = meta
+    companion object {
+        fun create(
+            identifier: String,
+            abilities: List<SkillAbility>,
+            material: XMaterial = XMaterial.BOOK,
+            displayName: String = identifier.replace("_", " ").trim(),
+            description: String = "",
+        ): Skill {
 
-        return itemStack
+            val skillId = UUID.randomUUID()
+            return Skill(skillId).apply {
+                this.identifier = identifier
+                this.abilities.addAll(abilities)
+                this.displayName = displayName
+                this.description = description
+                this.material = material
+            }
+        }
     }
 }

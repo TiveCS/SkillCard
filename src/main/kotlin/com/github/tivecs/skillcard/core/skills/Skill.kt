@@ -44,19 +44,25 @@ class Skill {
     companion object {
         fun create(
             identifier: String,
-            abilities: List<SkillAbility>,
+            abilities: ArrayList<String>,
             material: XMaterial = XMaterial.BOOK,
             displayName: String = identifier.replace("_", " ").trim(),
             description: String = "",
         ): Skill {
-
             val skillId = UUID.randomUUID()
+            var executionOrder = 1
+
             return Skill(skillId).apply {
                 this.identifier = identifier
-                this.abilities.addAll(abilities)
                 this.displayName = displayName
                 this.description = description
                 this.material = material
+
+                this.abilities.addAll(abilities.map { abilityIdentifier ->
+                    SkillAbility(skillId, abilityIdentifier, executionOrder).also {
+                        executionOrder++
+                    }
+                })
             }
         }
     }

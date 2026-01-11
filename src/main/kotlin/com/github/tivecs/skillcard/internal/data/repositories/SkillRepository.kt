@@ -22,8 +22,27 @@ object SkillRepository {
         TODO()
     }
 
+    fun getAllSkillsFromCache(): Collection<Skill> {
+        return cache.values
+    }
+
+    fun getAllIdentifiers(fromCacheIfExists: Boolean = true): Set<String> {
+        if (fromCacheIfExists && cache.isNotEmpty()) {
+            return cache.keys
+        }
+
+        val identifiers = transaction {
+            SkillTable.selectAll()
+                .map { it[SkillTable.identifier] }
+                .toSet()
+        }
+
+        return identifiers
+    }
+
     fun getByIdentifier(identifier: String, fromCacheIfExists: Boolean = true): Skill? {
         var skill: Skill? = null
+        var abilities = mutableListOf<SkillAbility>()
 
         if (fromCacheIfExists) {
             skill = cache[identifier]
@@ -31,33 +50,39 @@ object SkillRepository {
             if (skill != null) return skill
         }
 
-        skill = SkillTable.selectAll()
-            .where { SkillTable.identifier eq identifier }
-            .map {
-                Skill(it[SkillTable.id].value).apply {
-                    this.identifier = it[SkillTable.identifier]
+        transaction {
+            skill = SkillTable.selectAll()
+                .where { SkillTable.identifier eq identifier }
+                .map {
+                    Skill(it[SkillTable.id].value).apply {
+                        this.identifier = it[SkillTable.identifier]
+                    }
                 }
-            }
-            .singleOrNull()
+                .singleOrNull()
+
+            if (skill == null) return@transaction false
+
+            val foundAbilities = SkillAbilityTable.selectAll()
+                .where { SkillAbilityTable.skillId eq skill!!.skillId }
+                .map {
+                    SkillAbility(
+                        skillId = it[SkillAbilityTable.skillId].value,
+                        abilityIdentifier = it[SkillAbilityTable.abilityIdentifier],
+                        executionOrder = it[SkillAbilityTable.executionOrder])
+                }
+
+            abilities += foundAbilities
+        }
 
         if (skill == null) return null
-
-        val abilities = SkillAbilityTable.selectAll()
-            .where { SkillAbilityTable.skillId eq skill.skillId }
-            .map {
-                SkillAbility(
-                    skillId = it[SkillAbilityTable.skillId].value,
-                    abilityIdentifier = it[SkillAbilityTable.abilityIdentifier],
-                    executionOrder = it[SkillAbilityTable.executionOrder])
-            }
 
         abilities.forEach { ability ->
             ability.ability = AbilityRepository.get<Any>(ability.abilityIdentifier)
         }
 
-        skill.abilities.addAll(abilities)
+        skill!!.abilities.addAll(abilities)
 
-        cache[identifier] = skill
+        cache[identifier] = skill!!
 
         return skill
     }
@@ -82,6 +107,7 @@ object SkillRepository {
                 this[SkillAbilityTable.skillId] = skillId
                 this[SkillAbilityTable.abilityIdentifier] = ability.abilityIdentifier
                 this[SkillAbilityTable.executionOrder] = ability.executionOrder
+                this[SkillAbilityTable.abilityAttributes] = "{}"
             }
 
             commit()

@@ -1,5 +1,6 @@
 package com.github.tivecs.skillcard.gui.common.items
 
+import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
 import xyz.xenondevs.invui.gui.PagedGui
 import xyz.xenondevs.invui.item.ItemProvider
@@ -10,11 +11,11 @@ class PreviousPageGuiItem : PageItem(false) {
 
     override fun getItemProvider(gui: PagedGui<*>): ItemProvider {
         val builder = ItemBuilder(Material.RED_STAINED_GLASS_PANE)
-        builder.setDisplayName("Previous page")
+        builder.setDisplayName("&ePrevious page".colorized())
             .addLoreLines(
                 if (gui.hasNextPage())
-                    "Go to page " + (gui.currentPage + 2) + "/" + gui.pageAmount
-                else "There are no more pages"
+                    ("&3Go to page &b" + (gui.currentPage + 2) + "&7/&c" + gui.pageAmount).colorized()
+                else "&cThere are no more pages".colorized()
             )
         return builder
     }

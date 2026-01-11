@@ -8,5 +8,5 @@ object SkillAbilityTable : UUIDTable("skill_abilities") {
     val executionOrder = integer("execution_order")
 
     // JSON
-    val abilityAttributes = text("ability_attributes")
+    val abilityAttributes = text("ability_attributes").default("{}")
 }

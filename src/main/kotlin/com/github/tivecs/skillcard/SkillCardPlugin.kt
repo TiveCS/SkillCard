@@ -9,6 +9,7 @@ import com.github.tivecs.skillcard.builtin.abilities.ThunderAbility
 import com.github.tivecs.skillcard.builtin.triggers.OnAttackTrigger
 import com.github.tivecs.skillcard.builtin.triggers.OnAttackedTrigger
 import com.github.tivecs.skillcard.cmds.SkillCardAdminCommand
+import com.github.tivecs.skillcard.cmds.SkillCardAdminCommandTabCompleter
 import com.github.tivecs.skillcard.cmds.SkillCardCommand
 import com.github.tivecs.skillcard.core.player.PlayerEventListener
 import com.github.tivecs.skillcard.core.triggers.TriggerEventListener
@@ -29,6 +30,9 @@ class SkillCardPlugin : JavaPlugin() {
     companion object {
         lateinit var pluginConfig: SkillCardConfig
         lateinit var database: SkillCardDatabase
+
+        const val COMMAND_SKILLCARD = "skillcard"
+        const val COMMAND_SKILLCARD_ADMIN = "skillcardadmin"
     }
 
     override fun onEnable() {
@@ -40,8 +44,10 @@ class SkillCardPlugin : JavaPlugin() {
 
         database.migrate()
 
-        getCommand("skillcard")?.setExecutor(SkillCardCommand())
-        getCommand("skillcardadmin")?.setExecutor(SkillCardAdminCommand())
+        getCommand(COMMAND_SKILLCARD)?.setExecutor(SkillCardCommand())
+
+        getCommand(COMMAND_SKILLCARD_ADMIN)?.setExecutor(SkillCardAdminCommand())
+        getCommand(COMMAND_SKILLCARD_ADMIN)?.tabCompleter = SkillCardAdminCommandTabCompleter()
 
         val pluginManager = Bukkit.getPluginManager()
         pluginManager.registerEvents(TriggerEventListener(), this)
@@ -65,6 +71,7 @@ class SkillCardPlugin : JavaPlugin() {
 
     private fun registerInBuiltAbilities() {
         AbilityRepository.register(
+            this,
             HealAbility,
             DamageAbility,
             IgniteAbility,

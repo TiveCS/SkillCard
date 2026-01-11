@@ -1,7 +1,9 @@
 package com.github.tivecs.skillcard.builtin.abilities
 
+import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.abilities.Ability
 import com.github.tivecs.skillcard.core.abilities.AbilityExecuteResult
+import org.bukkit.Material
 import org.bukkit.entity.Entity
 
 enum class IgniteAbilityDurationType {
@@ -16,6 +18,12 @@ data class IgniteAbilityAttribute(
 
 object IgniteAbility : Ability<IgniteAbilityAttribute> {
     override val identifier: String = "ignite"
+
+    override val material: Material
+        get() = XMaterial.BLAZE_POWDER.get() ?: Material.BLAZE_POWDER
+
+    override val description: String
+        get() = "&fSets or adds fire ticks to the target entity."
 
     override fun execute(attribute: IgniteAbilityAttribute): AbilityExecuteResult {
         if (attribute.duration <= 0) return AbilityExecuteResult.CONDITION_NOT_MET

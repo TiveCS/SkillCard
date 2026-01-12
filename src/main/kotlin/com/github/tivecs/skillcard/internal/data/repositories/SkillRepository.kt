@@ -42,7 +42,7 @@ object SkillRepository {
 
     fun getByIdentifier(identifier: String, fromCacheIfExists: Boolean = true): Skill? {
         var skill: Skill? = null
-        var abilities = mutableListOf<SkillAbility>()
+        val abilities = mutableListOf<SkillAbility>()
 
         if (fromCacheIfExists) {
             skill = cache[identifier]
@@ -60,7 +60,7 @@ object SkillRepository {
                 }
                 .singleOrNull()
 
-            if (skill == null) return@transaction false
+            if (skill == null) return@transaction
 
             val foundAbilities = SkillAbilityTable.selectAll()
                 .where { SkillAbilityTable.skillId eq skill!!.skillId }
@@ -128,14 +128,15 @@ object SkillRepository {
     }
 
     fun delete(identifier: String, forceDelete: Boolean = false) {
-        val isUsedInAnySkillBook = false
-
-        if (isUsedInAnySkillBook && !forceDelete) {
-            return
-        }
-
         transaction {
+            var isUsedInAnySkillBook = false
+
+            if (isUsedInAnySkillBook && !forceDelete) {
+                return@transaction
+            }
+
             SkillTable.deleteWhere { SkillTable.identifier eq identifier }
+            cache.remove(identifier)
         }
     }
 

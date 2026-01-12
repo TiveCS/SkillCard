@@ -3,6 +3,7 @@
 import com.github.tivecs.skillcard.gui.admin.items.OpenAbilityListMenuItem
 import com.github.tivecs.skillcard.gui.admin.items.OpenAdminManageMenuItem
 import com.github.tivecs.skillcard.gui.admin.items.OpenSkillBookListMenuItem
+import com.github.tivecs.skillcard.gui.admin.items.OpenSkillCreateMenuItem
 import com.github.tivecs.skillcard.internal.data.repositories.SkillRepository
 import org.bukkit.entity.Player
 import xyz.xenondevs.invui.gui.PagedGui
@@ -21,12 +22,13 @@ object SkillListMenu {
                 "###ABC###",
                 "<xxxxxxx>",
                 "<xxxxxxx>",
-                "#########",
+                "####N####",
             )
             .addIngredient('x', Markers.CONTENT_LIST_SLOT_VERTICAL)
             .addIngredient('A', OpenAdminManageMenuItem())
             .addIngredient('B', OpenAbilityListMenuItem())
             .addIngredient('C', OpenSkillBookListMenuItem())
+            .addIngredient('N', OpenSkillCreateMenuItem())
             .setContent(skillItems)
             .build()
 

@@ -17,6 +17,14 @@ object AbilityRepository {
 
     fun getAllAbilities(): Collection<Ability<*>> = registeredAbilities.values
 
+    fun checkAllIsExists(abilityIdentifiers: Collection<String>): Boolean {
+        return abilityIdentifiers.all { identifier -> registeredAbilities.keys.contains(identifier) }
+    }
+
+    fun getNonExistingAbilities(identifiers: Collection<String>): Set<String> {
+        return registeredAbilities.keys.filter { !identifiers.contains(it) }.toSet()
+    }
+
     fun register(sourcePlugin: JavaPlugin, vararg abilities: Ability<*>) {
         abilities.forEach { ability ->
             if (registeredAbilities.containsKey(ability.identifier))

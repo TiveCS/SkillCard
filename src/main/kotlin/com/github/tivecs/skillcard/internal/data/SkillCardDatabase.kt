@@ -6,6 +6,8 @@ import com.github.tivecs.skillcard.internal.data.tables.SkillBookTable
 import com.github.tivecs.skillcard.internal.data.tables.PlayerInventorySlotTable
 import com.github.tivecs.skillcard.internal.data.tables.PlayerInventoryTable
 import com.github.tivecs.skillcard.internal.data.tables.SkillAbilityTable
+import com.github.tivecs.skillcard.internal.data.tables.SkillBookExecutionGroupSkillTable
+import com.github.tivecs.skillcard.internal.data.tables.SkillBookExecutionGroupTable
 import com.github.tivecs.skillcard.internal.data.tables.SkillTable
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
@@ -54,6 +56,8 @@ class SkillCardDatabase {
                 SkillTable,
                 SkillAbilityTable,
                 SkillBookTable,
+                SkillBookExecutionGroupTable,
+                SkillBookExecutionGroupSkillTable,
                 PlayerInventoryTable,
                 PlayerInventorySlotTable
             )

@@ -1,12 +1,13 @@
 package com.github.tivecs.skillcard.core.abilities
 
 import com.cryptomorin.xseries.XMaterial
+import com.github.tivecs.skillcard.core.skills.SkillExecutionContext
 import com.github.tivecs.skillcard.internal.extensions.capitalizeWords
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
-interface Ability<TAttribute> {
+interface Ability<TAttribute> where TAttribute : AbilityAttribute {
 
     val identifier: String
 
@@ -21,6 +22,8 @@ interface Ability<TAttribute> {
 
     fun execute(attribute: TAttribute): AbilityExecuteResult
 
+    fun mapExecutionContextToAttribute(context: SkillExecutionContext): TAttribute?
+
     fun displayItem(): ItemStack {
         val mat = material
         val item = ItemStack(mat)
@@ -32,5 +35,9 @@ interface Ability<TAttribute> {
         item.itemMeta = meta
 
         return item
+    }
+
+    fun getAttributePath(key: String): String {
+        return identifier + "_" + key
     }
 }

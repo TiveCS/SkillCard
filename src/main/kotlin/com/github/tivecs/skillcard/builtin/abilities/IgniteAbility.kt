@@ -2,6 +2,8 @@ package com.github.tivecs.skillcard.builtin.abilities
 
 import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.abilities.Ability
+import com.github.tivecs.skillcard.core.abilities.AbilityAttributeDataType
+import com.github.tivecs.skillcard.core.abilities.AbilityAttributeFieldConfigurable
 import com.github.tivecs.skillcard.core.abilities.AbilityExecuteResult
 import org.bukkit.Material
 import org.bukkit.entity.Entity
@@ -13,8 +15,27 @@ enum class IgniteAbilityDurationType {
 
 data class IgniteAbilityAttribute(
     val target: Entity,
+
+    @param:AbilityAttributeFieldConfigurable(AbilityAttributeDataType.INT)
     val duration: Int,
-    val type: IgniteAbilityDurationType = IgniteAbilityDurationType.SET)
+
+    @param:AbilityAttributeFieldConfigurable(AbilityAttributeDataType.STRING)
+    val type: IgniteAbilityDurationType = IgniteAbilityDurationType.SET) : AbilityAttribute {
+
+    companion object {
+        const val TARGET_KEY = "target"
+        const val DURATION_KEY = "duration"
+        const val TYPE_KEY = "type"
+    }
+
+    override fun toConfigurableAttributesMutableMap(): MutableMap<String, Any> {
+        return mutableMapOf(
+            TARGET_KEY to target,
+            DURATION_KEY to duration,
+            TYPE_KEY to type
+        )
+    }
+}
 
 object IgniteAbility : Ability<IgniteAbilityAttribute> {
     override val identifier: String = "ignite"

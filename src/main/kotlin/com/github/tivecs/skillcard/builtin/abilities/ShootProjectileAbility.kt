@@ -7,10 +7,33 @@ import org.bukkit.Material
 import org.bukkit.entity.*
 import org.bukkit.util.Vector
 
+enum class ShootableProjectileType(val projectileClass: Class<out Projectile>) {
+    ARROW(Arrow::class.java),
+    SNOWBALL(Snowball::class.java),
+    FIREBALL(Fireball::class.java),
+}
+
 data class ShootProjectileAbilityAttribute(
     val shooter: LivingEntity,
     val velocity: Vector,
-    val projectileClass: Class<out Projectile>)
+    val type: ShootableProjectileType) : AbilityAttribute {
+
+    companion object {
+        const val VELOCITY_KEY = "velocity"
+        const val SHOOTER_KEY = "shooter"
+        const val TYPE_KEY = "type"
+    }
+
+    override fun toConfigurableAttributesMutableMap(): MutableMap<String, Any> {
+        return mutableMapOf(
+            VELOCITY_KEY to velocity,
+            SHOOTER_KEY to shooter,
+            TYPE_KEY to type
+        )
+    }
+
+
+}
 
 object ShootProjectileAbility : Ability<ShootProjectileAbilityAttribute> {
     override val identifier: String = "shoot_projectile"
@@ -22,7 +45,7 @@ object ShootProjectileAbility : Ability<ShootProjectileAbilityAttribute> {
         get() = "&fShoots a projectile from the shooter with the specified velocity."
 
     override fun execute(attribute: ShootProjectileAbilityAttribute): AbilityExecuteResult {
-        attribute.shooter.launchProjectile(attribute.projectileClass, attribute.velocity)
+        attribute.shooter.launchProjectile(attribute.type.projectileClass, attribute.velocity)
 
         return AbilityExecuteResult.EXECUTED
     }

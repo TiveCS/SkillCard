@@ -1,6 +1,7 @@
 package com.github.tivecs.skillcard.builtin.triggers
 
 import com.github.tivecs.skillcard.core.triggers.Trigger
+import com.github.tivecs.skillcard.core.triggers.TriggerAttribute
 import com.github.tivecs.skillcard.core.triggers.TriggerExecuteResultState
 import com.github.tivecs.skillcard.core.triggers.TriggerResult
 import org.bukkit.entity.LivingEntity
@@ -9,10 +10,26 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 
 data class OnAttackTriggerAttribute(
     val attacker: LivingEntity,
-    val event: EntityDamageByEntityEvent)
+    val event: EntityDamageByEntityEvent) : TriggerAttribute {
+
+    companion object {
+        const val ATTACKER_KEY = "attacker"
+        const val EVENT_KEY = "event"
+    }
+
+    override fun toMutableMap(): MutableMap<String, Any> {
+        return mutableMapOf(
+            ATTACKER_KEY to this.attacker,
+            EVENT_KEY to this.event,
+        )
+    }
+
+}
 
 object OnAttackTrigger : Trigger<EntityDamageByEntityEvent, OnAttackTriggerAttribute> {
     override val identifier: String = "on_attack"
+
+    const val TARGET_ATTACKER_KEY = "attacker"
 
     override fun execute(event: EntityDamageByEntityEvent): TriggerResult<OnAttackTriggerAttribute> {
         val damager = event.damager
@@ -35,5 +52,17 @@ object OnAttackTrigger : Trigger<EntityDamageByEntityEvent, OnAttackTriggerAttri
             TriggerExecuteResultState.EXECUTED,
             OnAttackTriggerAttribute(actualDamager, event)
         )
+    }
+
+    override fun <TResult> getTarget(
+        result: TriggerResult<OnAttackTriggerAttribute>,
+        type: String
+    ): TResult? {
+        if (result.attributes == null) return null
+
+        return when(type) {
+            TARGET_ATTACKER_KEY -> result.attributes.attacker
+            else -> null
+        } as TResult?
     }
 }

@@ -6,7 +6,18 @@ import com.github.tivecs.skillcard.core.abilities.AbilityExecuteResult
 import org.bukkit.Location
 import org.bukkit.Material
 
-data class ThunderAbilityAttribute(val location: Location)
+data class ThunderAbilityAttribute(val location: Location) : AbilityAttribute {
+
+    companion object {
+        const val LOCATION_KEY = "location"
+    }
+
+    override fun toConfigurableAttributesMutableMap(): MutableMap<String, Any> {
+        return mutableMapOf(
+            LOCATION_KEY to location,
+        )
+    }
+}
 
 object ThunderAbility : Ability<ThunderAbilityAttribute> {
     override val identifier: String = "thunder"

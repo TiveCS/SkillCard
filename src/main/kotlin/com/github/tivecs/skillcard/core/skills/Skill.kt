@@ -1,6 +1,7 @@
 package com.github.tivecs.skillcard.core.skills
 
 import com.cryptomorin.xseries.XMaterial
+import com.github.tivecs.skillcard.core.triggers.Trigger
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
@@ -23,9 +24,13 @@ class Skill {
         this.skillId = skillId
     }
 
-    fun execute() {
+    fun execute(trigger: Trigger<*, *>, triggerAttributes: MutableMap<String, Any>) {
         abilities.sortBy { ab -> ab.executionOrder }
-        abilities.forEach { ab -> ab.execute(ab) }
+        abilities.forEach { ab ->
+            val skillAttributes = mutableMapOf<String, Any>()
+            val context = SkillExecutionContext(trigger, triggerAttributes, skillAttributes)
+            ab.execute(context)
+        }
     }
 
     fun getItem(): ItemStack {

@@ -1,7 +1,11 @@
 package com.github.tivecs.skillcard.core.books
 
 import com.cryptomorin.xseries.XMaterial
+import com.github.tivecs.skillcard.core.skills.Skill
+import com.github.tivecs.skillcard.core.triggers.Trigger
+import com.github.tivecs.skillcard.core.triggers.TriggerAttribute
 import com.github.tivecs.skillcard.internal.extensions.colorized
+import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
 import kotlin.jvm.optionals.getOrElse
@@ -15,23 +19,18 @@ class SkillBook {
     lateinit var displayName: String
     lateinit var description: String
 
-    val skills = mutableMapOf<String, Any>()
+    // Trigger Identifier, Skill
+    val triggerSkillsMap = mutableMapOf<String, List<Skill>>()
 
     constructor(bookId: UUID) {
         this.bookId = bookId
     }
 
-    fun getItem(): ItemStack? {
-        val xmat = XMaterial.matchXMaterial(material)
-        val mat = xmat.getOrElse { XMaterial.BOOK }
+    fun getItem(): ItemStack {
+        val mat = XMaterial.matchXMaterial(material).getOrElse { XMaterial.BOOK }
+        val item = mat.parseItem() ?: ItemStack(Material.BOOK)
 
-        val item = mat.parseItem()
-
-        if (item == null) return null
-
-        val meta = item.itemMeta
-
-        if (meta == null) return item
+        val meta = item.itemMeta ?: return item
 
         meta.setDisplayName(displayName.colorized())
         meta.lore = description.split("\n").map { it.colorized() }
@@ -40,7 +39,13 @@ class SkillBook {
         return item
     }
 
-    fun execute() {
+    fun <TTrigger : Trigger<*, TTriggerAttribute>, TTriggerAttribute : TriggerAttribute> execute(trigger: TTrigger, triggerAttribute: TTriggerAttribute) {
+        val skills = triggerSkillsMap[trigger.identifier]
 
+        if (skills.isNullOrEmpty()) return
+
+        skills.forEach {
+            it.execute(trigger, triggerAttribute.toMutableMap())
+        }
     }
 }

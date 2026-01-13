@@ -1,12 +1,22 @@
 package com.github.tivecs.skillcard.builtin.abilities
 
 import com.cryptomorin.xseries.XMaterial
-import com.github.tivecs.skillcard.core.abilities.Ability
-import com.github.tivecs.skillcard.core.abilities.AbilityExecuteResult
+import com.github.tivecs.skillcard.core.abilities.*
 import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
 
-data class HealAbilityAttribute(val target: LivingEntity, val amount: Double)
+data class HealAbilityAttribute(
+    val target: LivingEntity,
+
+    @param:AbilityAttributeFieldConfigurable(AbilityAttributeDataType.DOUBLE)
+    val amount: Double) : AbilityAttribute {
+
+    companion object {
+        const val AMOUNT_KEY = "amount"
+    }
+
+
+}
 
 object HealAbility : Ability<HealAbilityAttribute>  {
     override val identifier: String = "heal"

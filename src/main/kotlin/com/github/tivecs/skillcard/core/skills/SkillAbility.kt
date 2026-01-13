@@ -1,6 +1,7 @@
 package com.github.tivecs.skillcard.core.skills
 
 import com.github.tivecs.skillcard.core.abilities.Ability
+import com.github.tivecs.skillcard.core.triggers.TriggerAttributeKey
 import java.util.UUID
 
 class SkillAbility {
@@ -17,7 +18,8 @@ class SkillAbility {
         this.executionOrder = executionOrder
     }
 
-    fun execute(attribute: Any) {
-        TODO()
+    fun execute(context: SkillExecutionContext) {
+        val abilityAttributes = ability.
+        ability.execute()
     }
 }

@@ -2,6 +2,7 @@ package com.github.tivecs.skillcard.gui.admin.items
 
 import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.gui.admin.SkillCreationMenu
+import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
@@ -23,6 +24,6 @@ class OpenSkillCreateMenuItem : AbstractItem() {
         val mat = XMaterial.WRITABLE_BOOK.get() ?: Material.WRITABLE_BOOK
 
         return ItemBuilder(mat)
-            .setDisplayName("&6&lCreate New Skill")
+            .setDisplayName("&6&lCreate New Skill".colorized())
     }
 }

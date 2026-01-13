@@ -28,6 +28,8 @@ class ConfirmSkillCreateItem(val builder: SkillBuilder) : AbstractItem() {
         SkillRepository.create(newSkill)
 
         SkillListMenu.open(player)
+
+        player.sendMessage("&eSkill '&b${builder.identifier}&e' has been created successfully!".colorized())
     }
 
     override fun getItemProvider(): ItemProvider {
@@ -40,7 +42,7 @@ class ConfirmSkillCreateItem(val builder: SkillBuilder) : AbstractItem() {
         } ?: Material.BARRIER
 
         val displayName = when (isValid) {
-            true -> builder.displayName ?: "???"
+            true -> builder.displayName ?: "&7???"
             false -> builder.displayName + " &c[Missing Required Fields]"
         }
         val description: MutableList<String> = when (isValid) {
@@ -50,7 +52,7 @@ class ConfirmSkillCreateItem(val builder: SkillBuilder) : AbstractItem() {
 
         if (isValid) {
             description.add(" ")
-            description.add("&aClick to Confirm Create Skill")
+            description.add("&aClick to Confirm Create Skill".colorized())
         }
 
         return ItemBuilder(mat)

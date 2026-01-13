@@ -20,7 +20,6 @@ object SkillCreationMenu {
         currentDraftSkills[viewer.uniqueId] = playerSkillDraft
 
         val gui = Gui.normal()
-            .setFrozen(true)
             .setStructure(
                 "ABCD....X"
             )
@@ -43,7 +42,7 @@ object SkillCreationMenu {
                 }
             ))
             .addIngredient('C', OpenInputStringMenuItem(
-                displayName = "&e&Set Description",
+                displayName = "&e&lSet Description",
                 material = XMaterial.PAPER.get() ?: Material.PAPER,
                 title =  "Input Skill's Ability Description",
                 onRename = { input ->

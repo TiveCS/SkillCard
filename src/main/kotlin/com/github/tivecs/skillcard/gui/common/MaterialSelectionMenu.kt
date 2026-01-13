@@ -2,6 +2,7 @@ package com.github.tivecs.skillcard.gui.common
 
 import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.gui.common.items.MaterialSelectionItem
+import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.entity.Player
 import xyz.xenondevs.invui.gui.PagedGui
 import xyz.xenondevs.invui.gui.structure.Markers
@@ -17,10 +18,9 @@ object MaterialSelectionMenu {
         val gui = PagedGui.items()
             .setStructure(
                 "xxxxxxxx#",
-                "xxxxxxxx#",
                 "xxxxxxxx>",
-                "xxxxxxxx<",
                 "xxxxxxxx#",
+                "xxxxxxxx<",
                 "xxxxxxxx#",
             )
             .addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL)
@@ -29,6 +29,7 @@ object MaterialSelectionMenu {
 
         val window = Window.single()
             .setGui(gui)
+            .setTitle(title.colorized())
             .setViewer(viewer)
             .build()
 

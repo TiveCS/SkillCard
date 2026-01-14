@@ -23,7 +23,6 @@ data class DamageAbilityAttribute(
             return DamageAbilityAttribute(amount, target)
         }
     }
-
 }
 
 object DamageAbility : Ability<DamageAbilityAttribute> {
@@ -35,17 +34,13 @@ object DamageAbility : Ability<DamageAbilityAttribute> {
     override val description: String
         get() = "&fDeals a specified amount of damage to the target entity."
 
-    override fun execute(attribute: DamageAbilityAttribute): AbilityExecuteResult {
+    override fun execute(attribute: DamageAbilityAttribute): AbilityExecuteResultState {
         if (attribute.target.isDead)
-            return AbilityExecuteResult.CONDITION_NOT_MET
+            return AbilityExecuteResultState.CONDITION_NOT_MET
 
         attribute.target.damage(attribute.amount)
 
-        return AbilityExecuteResult.EXECUTED
-    }
-
-    override fun mapExecutionContextToAttribute(context: Map<String, Any>): DamageAbilityAttribute? {
-        TODO("Not yet implemented")
+        return AbilityExecuteResultState.EXECUTED
     }
 
 }

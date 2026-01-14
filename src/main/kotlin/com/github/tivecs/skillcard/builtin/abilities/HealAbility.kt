@@ -27,12 +27,12 @@ object HealAbility : Ability<HealAbilityAttribute>  {
     override val description: String
         get() = "&fHeals the target entity by a specified amount."
 
-    override fun execute(attribute: HealAbilityAttribute): AbilityExecuteResult {
+    override fun execute(attribute: HealAbilityAttribute): AbilityExecuteResultState {
         if (attribute.target.isDead)
-            return AbilityExecuteResult.CONDITION_NOT_MET
+            return AbilityExecuteResultState.CONDITION_NOT_MET
 
         attribute.target.health += attribute.amount
 
-        return AbilityExecuteResult.EXECUTED
+        return AbilityExecuteResultState.EXECUTED
     }
 }

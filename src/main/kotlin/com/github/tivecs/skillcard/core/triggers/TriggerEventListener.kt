@@ -28,12 +28,22 @@ class TriggerEventListener : Listener {
 
         val playerInventory = PlayerInventoryRepository.getOrCreate(attacker.uniqueId)
 
-        val targetSkillBooks = playerInventory.slots.values.filter { slot ->
+        val targetSlots = playerInventory.slots.values.filter { slot ->
             slot.bookId != null && slot.book != null && slot.book!!.triggerSkillsMap.containsKey(onAttackTrigger.identifier)
-        }.map { it.book!! }
+        }
 
-        targetSkillBooks.forEach {
-            it.execute(onAttackTrigger, result.attributes)
+        val executionContext = TriggerExecutionContext(
+            executor = attacker,
+            targetSlots = targetSlots,
+            trigger = onAttackTrigger,
+            event = event,
+            triggerResult = result,
+        )
+
+        var order: Int = 1
+        targetSlots.forEach {
+            it.execute(executionContext, order)
+            order++
         }
     }
 
@@ -52,12 +62,22 @@ class TriggerEventListener : Listener {
 
         val playerInventory = PlayerInventoryRepository.getOrCreate(defender.uniqueId)
 
-        val targetSkillBooks = playerInventory.slots.values.filter { slot ->
+        val targetSlots = playerInventory.slots.values.filter { slot ->
             slot.bookId != null && slot.book != null && slot.book!!.triggerSkillsMap.containsKey(onAttackedTrigger.identifier)
-        }.map { it.book!! }
+        }
 
-        targetSkillBooks.forEach {
-            it.execute(onAttackedTrigger, result.attributes)
+        val executionContext = TriggerExecutionContext(
+            executor = defender,
+            targetSlots = targetSlots,
+            trigger = onAttackedTrigger,
+            event = event,
+            triggerResult = result,
+        )
+
+        var order: Int = 1
+        targetSlots.forEach {
+            it.execute(executionContext, order)
+            order++
         }
     }
 

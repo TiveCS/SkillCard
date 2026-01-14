@@ -8,5 +8,7 @@ interface Trigger<TEvent, TAttribute> where TEvent : Event, TAttribute : Trigger
 
     fun execute(event: TEvent) : TriggerResult<TAttribute>
 
-    fun <TResult> getTarget(result: TriggerResult<TAttribute>, type: String): TResult?
+    fun getTarget(result: TriggerResult<*>, type: String): Any?
+
+    fun getAvailableTargets(): Set<String>
 }

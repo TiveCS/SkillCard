@@ -36,27 +36,6 @@ class SkillCardAdminCommand : CommandExecutor {
             sender.sendMessage("&cSkillCard Admin Command Help".colorized())
             sender.sendMessage(" ")
             sender.sendMessage("&c/$label &f[manage] &8- &7Open SkillCard management menu".colorized())
-            sender.sendMessage("&c/$label skill new <skill_identifier> [...ability_identifiers] &8- &7Create new skill".colorized())
-            return true
-        }
-
-        if (args.size >= 3 && args[0] == "skill" && args[1] == "new") {
-            val skillIdentifier = args[2]!!
-//            val abilityIdentifiers = args.slice(IntRange(3, args.size)).filter { !it.isNullOrEmpty() }
-
-            val existingSkill = SkillRepository.getByIdentifier(skillIdentifier)
-
-            if (existingSkill != null) {
-                sender.sendMessage("&eSkill '&c$skillIdentifier&e' already exist".colorized())
-                return false
-            }
-
-            val newSkill = Skill.create(
-                skillIdentifier,
-                abilities = arrayListOf("thunder"))
-
-            SkillRepository.create(newSkill)
-            sender.sendMessage("&aSkill '&c$skillIdentifier&a' created successfully".colorized())
             return true
         }
 

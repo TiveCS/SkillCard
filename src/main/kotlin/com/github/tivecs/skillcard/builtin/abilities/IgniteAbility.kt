@@ -4,7 +4,7 @@ import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.abilities.Ability
 import com.github.tivecs.skillcard.core.abilities.AbilityAttributeDataType
 import com.github.tivecs.skillcard.core.abilities.AbilityAttributeFieldConfigurable
-import com.github.tivecs.skillcard.core.abilities.AbilityExecuteResult
+import com.github.tivecs.skillcard.core.abilities.AbilityExecuteResultState
 import org.bukkit.Material
 import org.bukkit.entity.Entity
 
@@ -46,16 +46,16 @@ object IgniteAbility : Ability<IgniteAbilityAttribute> {
     override val description: String
         get() = "&fSets or adds fire ticks to the target entity."
 
-    override fun execute(attribute: IgniteAbilityAttribute): AbilityExecuteResult {
-        if (attribute.duration <= 0) return AbilityExecuteResult.CONDITION_NOT_MET
-        if (attribute.target.isDead) return AbilityExecuteResult.CONDITION_NOT_MET
+    override fun execute(attribute: IgniteAbilityAttribute): AbilityExecuteResultState {
+        if (attribute.duration <= 0) return AbilityExecuteResultState.CONDITION_NOT_MET
+        if (attribute.target.isDead) return AbilityExecuteResultState.CONDITION_NOT_MET
 
         attribute.target.fireTicks = when (attribute.type) {
             IgniteAbilityDurationType.SET -> attribute.duration
             IgniteAbilityDurationType.ADD -> attribute.target.fireTicks + attribute.duration
         }
 
-        return AbilityExecuteResult.EXECUTED
+        return AbilityExecuteResultState.EXECUTED
     }
 
 }

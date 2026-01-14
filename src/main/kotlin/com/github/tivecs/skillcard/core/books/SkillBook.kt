@@ -2,10 +2,12 @@ package com.github.tivecs.skillcard.core.books
 
 import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.skills.Skill
+import com.github.tivecs.skillcard.core.skills.SkillExecutionContext
 import com.github.tivecs.skillcard.core.triggers.Trigger
 import com.github.tivecs.skillcard.core.triggers.TriggerAttribute
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
+import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
 import kotlin.jvm.optionals.getOrElse
@@ -39,13 +41,16 @@ class SkillBook {
         return item
     }
 
-    fun <TTrigger : Trigger<*, TTriggerAttribute>, TTriggerAttribute : TriggerAttribute> execute(trigger: TTrigger, triggerAttribute: TTriggerAttribute) {
+    fun <TEvent : Event> execute(context: SkillBookExecutionContext<TEvent>) {
+        val trigger = context.getTrigger()
         val skills = triggerSkillsMap[trigger.identifier]
 
         if (skills.isNullOrEmpty()) return
 
         skills.forEach {
-            it.execute(trigger, triggerAttribute.toMutableMap())
+            it.execute(SkillExecutionContext(
+                skillBook = this,
+                skillBookContext = context))
         }
     }
 }

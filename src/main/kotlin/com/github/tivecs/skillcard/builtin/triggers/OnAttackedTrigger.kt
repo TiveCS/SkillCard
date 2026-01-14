@@ -33,6 +33,7 @@ object OnAttackedTrigger : Trigger<EntityDamageByEntityEvent, OnAttackedTriggerA
 
     const val TARGET_ATTACKER_KEY = "attacker"
     const val TARGET_DEFENDER_KEY = "defender"
+    private val AVAILABLE_TARGETS = setOf(TARGET_ATTACKER_KEY, TARGET_DEFENDER_KEY)
 
     override fun execute(event: EntityDamageByEntityEvent): TriggerResult<OnAttackedTriggerAttribute> {
         val damager = event.damager
@@ -62,13 +63,17 @@ object OnAttackedTrigger : Trigger<EntityDamageByEntityEvent, OnAttackedTriggerA
         )
     }
 
-    override fun <TResult> getTarget(result: TriggerResult<OnAttackedTriggerAttribute>, type: String): TResult? {
-        if (result.attributes == null) return null
+    override fun getTarget(result: TriggerResult<*>, type: String): Any? {
+        if (result.attributes == null || result.attributes !is OnAttackedTriggerAttribute) return null
 
         return when (type) {
-            TARGET_ATTACKER_KEY -> result.attributes.attacker as TResult
-            TARGET_DEFENDER_KEY -> result.attributes.defender as TResult
+            TARGET_ATTACKER_KEY -> result.attributes.attacker
+            TARGET_DEFENDER_KEY -> result.attributes.defender
             else -> null
         }
+    }
+
+    override fun getAvailableTargets(): Set<String> {
+        return AVAILABLE_TARGETS
     }
 }

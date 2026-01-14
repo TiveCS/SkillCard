@@ -1,3 +1,3 @@
 package com.github.tivecs.skillcard.core.triggers
 
-data class TriggerResult<TAttribute>(val state: TriggerExecuteResultState, val attributes: TAttribute?)
+data class TriggerResult<TAttribute : TriggerAttribute>(val state: TriggerExecuteResultState, val attributes: TAttribute?)

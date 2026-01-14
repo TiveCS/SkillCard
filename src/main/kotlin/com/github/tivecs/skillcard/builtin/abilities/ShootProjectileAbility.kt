@@ -2,7 +2,8 @@ package com.github.tivecs.skillcard.builtin.abilities
 
 import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.abilities.Ability
-import com.github.tivecs.skillcard.core.abilities.AbilityExecuteResult
+import com.github.tivecs.skillcard.core.abilities.AbilityAttribute
+import com.github.tivecs.skillcard.core.abilities.AbilityExecuteResultState
 import org.bukkit.Material
 import org.bukkit.entity.*
 import org.bukkit.util.Vector
@@ -23,16 +24,6 @@ data class ShootProjectileAbilityAttribute(
         const val SHOOTER_KEY = "shooter"
         const val TYPE_KEY = "type"
     }
-
-    override fun toConfigurableAttributesMutableMap(): MutableMap<String, Any> {
-        return mutableMapOf(
-            VELOCITY_KEY to velocity,
-            SHOOTER_KEY to shooter,
-            TYPE_KEY to type
-        )
-    }
-
-
 }
 
 object ShootProjectileAbility : Ability<ShootProjectileAbilityAttribute> {
@@ -44,9 +35,9 @@ object ShootProjectileAbility : Ability<ShootProjectileAbilityAttribute> {
     override val description: String
         get() = "&fShoots a projectile from the shooter with the specified velocity."
 
-    override fun execute(attribute: ShootProjectileAbilityAttribute): AbilityExecuteResult {
+    override fun execute(attribute: ShootProjectileAbilityAttribute): AbilityExecuteResultState {
         attribute.shooter.launchProjectile(attribute.type.projectileClass, attribute.velocity)
 
-        return AbilityExecuteResult.EXECUTED
+        return AbilityExecuteResultState.EXECUTED
     }
 }

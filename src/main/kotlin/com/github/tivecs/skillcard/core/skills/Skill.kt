@@ -1,9 +1,11 @@
 package com.github.tivecs.skillcard.core.skills
 
 import com.cryptomorin.xseries.XMaterial
+import com.github.tivecs.skillcard.core.books.SkillBookExecutionContext
 import com.github.tivecs.skillcard.core.triggers.Trigger
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
+import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 import java.util.UUID
 
@@ -24,13 +26,9 @@ class Skill {
         this.skillId = skillId
     }
 
-    fun execute(trigger: Trigger<*, *>, triggerAttributes: MutableMap<String, Any>) {
-        abilities.sortBy { ab -> ab.executionOrder }
-        abilities.forEach { ab ->
-            val skillAttributes = mutableMapOf<String, Any>()
-            val context = SkillExecutionContext(trigger, triggerAttributes, skillAttributes)
-            ab.execute(context)
-        }
+    fun <TEvent : Event> execute(context: SkillExecutionContext<TEvent>) {
+        abilities.sortBy { it.executionOrder }
+        abilities.forEach { it.execute(context) }
     }
 
     fun getItem(): ItemStack {
@@ -53,6 +51,7 @@ class Skill {
             material: XMaterial = XMaterial.BOOK,
             displayName: String = identifier.replace("_", " ").trim(),
             description: String = "",
+            triggerTargetType: String
         ): Skill {
             val skillId = UUID.randomUUID()
             var executionOrder = 1
@@ -64,7 +63,7 @@ class Skill {
                 this.material = material
 
                 this.abilities.addAll(abilities.map { abilityIdentifier ->
-                    SkillAbility(skillId, abilityIdentifier, executionOrder).also {
+                    SkillAbility(skillId, abilityIdentifier, executionOrder, triggerTargetType).also {
                         executionOrder++
                     }
                 })

@@ -2,7 +2,7 @@ package com.github.tivecs.skillcard.builtin.abilities
 
 import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.abilities.Ability
-import com.github.tivecs.skillcard.core.abilities.AbilityExecuteResult
+import com.github.tivecs.skillcard.core.abilities.AbilityExecuteResultState
 import org.bukkit.Location
 import org.bukkit.Material
 
@@ -28,13 +28,13 @@ object ThunderAbility : Ability<ThunderAbilityAttribute> {
     override val description: String
         get() = "&fStrikes lightning at the specified location."
 
-    override fun execute(attribute: ThunderAbilityAttribute): AbilityExecuteResult {
+    override fun execute(attribute: ThunderAbilityAttribute): AbilityExecuteResultState {
         if (attribute.location.world == null || !attribute.location.isWorldLoaded)
-            return AbilityExecuteResult.CONDITION_NOT_MET
+            return AbilityExecuteResultState.CONDITION_NOT_MET
 
         attribute.location.world?.strikeLightning(attribute.location)
 
-        return AbilityExecuteResult.EXECUTED
+        return AbilityExecuteResultState.EXECUTED
     }
 
 }

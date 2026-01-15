@@ -1,6 +1,8 @@
 package com.github.tivecs.skillcard.core.skills
 
 import com.github.tivecs.skillcard.core.abilities.Ability
+import com.github.tivecs.skillcard.core.abilities.AbilityAttribute
+import com.github.tivecs.skillcard.internal.exceptions.SkillAbilityObjectNotInitialized
 import org.bukkit.event.Event
 import java.util.UUID
 
@@ -10,8 +12,9 @@ class SkillAbility {
     val abilityIdentifier: String
     var executionOrder: Int
     val triggerTargetType: String
+    val abilityAttributes: Map<String, Any> = mapOf()
 
-    lateinit var ability: Ability<*>
+    lateinit var ability: Ability<AbilityAttribute>
 
     constructor(skillId: UUID, abilityIdentifier: String, executionOrder: Int, triggerTargetType: String) {
         this.skillId = skillId
@@ -21,8 +24,11 @@ class SkillAbility {
     }
 
     fun <TEvent : Event> execute(context: SkillExecutionContext<TEvent>) {
-        val trigger = context.skillBookContext.getTrigger()
-        val triggerResult = context.skillBookContext.getTriggerResult()
-        val target = trigger.getTarget(triggerResult, triggerTargetType)
+        if (!::ability.isInitialized) {
+            throw SkillAbilityObjectNotInitialized(this)
+        }
+
+        val attribute = ability.createAttribute(context, this) ?: return
+        ability.execute(attribute)
     }
 }

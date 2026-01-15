@@ -10,7 +10,7 @@ class PlayerEventListener : Listener {
 
     @EventHandler
     fun handleOnPlayerJoin(event: PlayerJoinEvent) {
-//        PlayerInventoryRepository.getOrCreate(event.player.uniqueId)
+        PlayerInventoryRepository.getOrCreate(event.player.uniqueId)
     }
 
     @EventHandler

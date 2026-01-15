@@ -30,7 +30,6 @@ class SkillCardCommand : CommandExecutor {
             sender.sendMessage("&6/skillcard &eequip <slot> &8- &fEquip skill book item on your hand to inventory slot".colorized())
             sender.sendMessage("&6/skillcard &eunequip <slot> &8- &fUnequip inventory slot".colorized())
             sender.sendMessage("&6/skillcard &elock [slot] &8- &fToggle lock slot to prevent accidentally unequip it".colorized())
-            sender.sendMessage("&6/skillcard &elock [slot] &8- &fToggle lock slot to prevent accidentally unequip it".colorized())
             return true
         }
 

@@ -1,6 +1,5 @@
 package com.github.tivecs.skillcard.cmds
 
-import com.github.tivecs.skillcard.core.skills.Skill
 import com.github.tivecs.skillcard.gui.admin.SkillAdminManageMenu
 import com.github.tivecs.skillcard.internal.data.repositories.SkillRepository
 import com.github.tivecs.skillcard.internal.extensions.colorized

@@ -1,9 +1,12 @@
 package com.github.tivecs.skillcard.core.abilities
 
 import com.cryptomorin.xseries.XMaterial
+import com.github.tivecs.skillcard.core.skills.SkillAbility
+import com.github.tivecs.skillcard.core.skills.SkillExecutionContext
 import com.github.tivecs.skillcard.internal.extensions.capitalizeWords
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
+import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 
 interface Ability<TAttribute> where TAttribute : AbilityAttribute {
@@ -19,7 +22,9 @@ interface Ability<TAttribute> where TAttribute : AbilityAttribute {
     val description: String
         get() = "&fNo description provided."
 
-    fun execute(attribute: TAttribute): AbilityExecuteResultState
+    fun execute(attribute: TAttribute?): AbilityExecuteResultState
+
+    fun <TEvent : Event> createAttribute(context: SkillExecutionContext<TEvent>, skillAbility: SkillAbility): TAttribute?
 
     fun displayItem(): ItemStack {
         val mat = material
@@ -32,9 +37,5 @@ interface Ability<TAttribute> where TAttribute : AbilityAttribute {
         item.itemMeta = meta
 
         return item
-    }
-
-    fun getAttributePath(key: String): String {
-        return identifier + "_" + key
     }
 }

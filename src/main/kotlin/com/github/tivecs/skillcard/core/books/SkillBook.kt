@@ -49,6 +49,7 @@ class SkillBook {
 
         skills.forEach {
             it.execute(SkillExecutionContext(
+                skill = it,
                 skillBook = this,
                 skillBookContext = context))
         }

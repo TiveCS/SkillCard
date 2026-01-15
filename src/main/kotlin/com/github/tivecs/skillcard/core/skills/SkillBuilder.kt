@@ -12,6 +12,7 @@ class SkillBuilder {
     var description: String? = null
     var material: XMaterial? = null
     var displayName: String? = null
+    var triggerTargetType: String? = null
     var abilities: ArrayList<String> = arrayListOf()
 
     fun validate(): List<String> {
@@ -40,6 +41,10 @@ class SkillBuilder {
             }
         }
 
+        if (triggerTargetType.isNullOrEmpty()) {
+            errors.add("&cTrigger Target Type cannot be empty".colorized())
+        }
+
         return errors
     }
 
@@ -56,7 +61,8 @@ class SkillBuilder {
             abilities = abilities,
             material = material ?: XMaterial.BOOK,
             displayName = displayName ?: identifier!!.trim().replace("_", " ").capitalizeWords(),
-            description = description ?: ""
+            description = description ?: "",
+            triggerTargetType = triggerTargetType ?: ""
         )
     }
 }

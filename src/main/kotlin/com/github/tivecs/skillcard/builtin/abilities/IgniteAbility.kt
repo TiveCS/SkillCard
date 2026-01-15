@@ -2,11 +2,16 @@ package com.github.tivecs.skillcard.builtin.abilities
 
 import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.abilities.Ability
+import com.github.tivecs.skillcard.core.abilities.AbilityAttribute
 import com.github.tivecs.skillcard.core.abilities.AbilityAttributeDataType
 import com.github.tivecs.skillcard.core.abilities.AbilityAttributeFieldConfigurable
 import com.github.tivecs.skillcard.core.abilities.AbilityExecuteResultState
+import com.github.tivecs.skillcard.core.skills.SkillAbility
+import com.github.tivecs.skillcard.core.skills.SkillExecutionContext
+import com.github.tivecs.skillcard.core.triggers.TriggerAttributeKey
 import org.bukkit.Material
 import org.bukkit.entity.Entity
+import org.bukkit.event.Event
 
 enum class IgniteAbilityDurationType {
     SET,
@@ -23,17 +28,8 @@ data class IgniteAbilityAttribute(
     val type: IgniteAbilityDurationType = IgniteAbilityDurationType.SET) : AbilityAttribute {
 
     companion object {
-        const val TARGET_KEY = "target"
         const val DURATION_KEY = "duration"
         const val TYPE_KEY = "type"
-    }
-
-    override fun toConfigurableAttributesMutableMap(): MutableMap<String, Any> {
-        return mutableMapOf(
-            TARGET_KEY to target,
-            DURATION_KEY to duration,
-            TYPE_KEY to type
-        )
     }
 }
 
@@ -46,7 +42,9 @@ object IgniteAbility : Ability<IgniteAbilityAttribute> {
     override val description: String
         get() = "&fSets or adds fire ticks to the target entity."
 
-    override fun execute(attribute: IgniteAbilityAttribute): AbilityExecuteResultState {
+    override fun execute(attribute: IgniteAbilityAttribute?): AbilityExecuteResultState {
+        if (attribute == null) return AbilityExecuteResultState.INVALID_ATTRIBUTE
+
         if (attribute.duration <= 0) return AbilityExecuteResultState.CONDITION_NOT_MET
         if (attribute.target.isDead) return AbilityExecuteResultState.CONDITION_NOT_MET
 
@@ -56,6 +54,25 @@ object IgniteAbility : Ability<IgniteAbilityAttribute> {
         }
 
         return AbilityExecuteResultState.EXECUTED
+    }
+
+    override fun <TEvent : Event> createAttribute(
+        context: SkillExecutionContext<TEvent>,
+        skillAbility: SkillAbility
+    ): IgniteAbilityAttribute? {
+        val trigger = context.skillBookContext.triggerContext.trigger
+        val triggerResult = context.skillBookContext.triggerContext.triggerResult
+
+        val target = trigger.getTarget(triggerResult, TriggerAttributeKey.TARGET_TYPE.key) as? Entity ?: return null
+        val duration = skillAbility.abilityAttributes[IgniteAbilityAttribute.DURATION_KEY] as? Int ?: return null
+        val type = skillAbility.abilityAttributes[IgniteAbilityAttribute.TYPE_KEY] as? String ?: return null
+        val durationIgniteType: IgniteAbilityDurationType = IgniteAbilityDurationType.valueOf(type.uppercase())
+
+        return IgniteAbilityAttribute(
+            target,
+            duration,
+            durationIgniteType,
+        )
     }
 
 }

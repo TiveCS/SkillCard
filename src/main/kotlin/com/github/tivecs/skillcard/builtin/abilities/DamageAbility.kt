@@ -13,18 +13,8 @@ data class DamageAbilityAttribute(
     val amount: Double,
     val target: LivingEntity) : AbilityAttribute {
 
-    companion object : ConfigurableAbilityAttributes {
+    companion object  {
         const val AMOUNT_KEY = "amount"
-
-        override fun fromMapAttributes(
-            triggerAttributes: Map<String, Any>,
-            skillAttributes: Map<String, Any>
-        ): AbilityAttribute? {
-            val target = triggerAttributes[TriggerAttributeKey.TARGET_TYPE.key] as? LivingEntity ?: return null
-            val amount = skillAttributes[AMOUNT_KEY] as? Double ?: return null
-
-            return DamageAbilityAttribute(amount, target)
-        }
     }
 }
 

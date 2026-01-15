@@ -4,6 +4,7 @@ import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.abilities.*
 import com.github.tivecs.skillcard.core.skills.SkillAbility
 import com.github.tivecs.skillcard.core.skills.SkillExecutionContext
+import com.github.tivecs.skillcard.core.triggers.TriggerAttributeKey
 import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Event
@@ -17,8 +18,6 @@ data class HealAbilityAttribute(
     companion object {
         const val AMOUNT_KEY = "amount"
     }
-
-
 }
 
 object HealAbility : Ability<HealAbilityAttribute>  {
@@ -45,6 +44,12 @@ object HealAbility : Ability<HealAbilityAttribute>  {
         context: SkillExecutionContext<TEvent>,
         skillAbility: SkillAbility
     ): HealAbilityAttribute? {
-        TODO("Not yet implemented")
+        val trigger = context.skillBookContext.getTrigger()
+        val triggerResult = context.skillBookContext.getTriggerResult()
+
+        val targetToHeal = trigger.getTarget(triggerResult, TriggerAttributeKey.TARGET_TYPE.key) as? LivingEntity ?: return null
+        val healAmount = skillAbility.abilityAttributes[HealAbilityAttribute.AMOUNT_KEY] as? Double ?: return null
+
+        return HealAbilityAttribute(targetToHeal, healAmount)
     }
 }

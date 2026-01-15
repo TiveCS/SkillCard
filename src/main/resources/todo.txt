@@ -1,0 +1,25 @@
+- Add feature to automatically detect the attribute acceptance data type
+  (for example: ThunderAbility require location, which supported data type are Entity (got from .location) and Location for now)
+
+- Add feature to automatically know which attribute is configurable by the user
+
+- Add feature to set available skill's trigger target type (of course with the list of available trigger types)
+
+The Create Skill Flow:
+1. User set human readable identifier
+2. Select skill trigger. Allow it to create multiple branch, but per branch only have one trigger.
+   (Branch: Pair of trigger and sets of abilities, so the skill can have multiple variation)
+3.1. Add ability to the skill (ThunderAbility, IgniteAbility, etc)
+3.2. Set the target based on allowed type of trigger.
+3.3. Configure the attributes
+
+Example case: ThunderSpeed Skill. Strike thunder to the trigger target #1 and apply speed potion effect buff to the trigger target #2
+Trigger (just one for simplicity example):
+- On Attack
+
+Abilities:
+- Thunder (target_type: defender [got from the trigger execution data]) {} // no configurable settings, so empty json
+- PotionEffect (target_type: attacker [got from the trigger execution data]) {"type": "SPEED", "amplifier": 1, "duration": 600}
+
+Translate to plain language:
+Strike thunder to the defender and also apply speed potion buff to the attacker

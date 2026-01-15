@@ -11,12 +11,19 @@ class PreviousPageGuiItem : PageItem(false) {
 
     override fun getItemProvider(gui: PagedGui<*>): ItemProvider {
         val builder = ItemBuilder(Material.RED_STAINED_GLASS_PANE)
-        builder.setDisplayName("&ePrevious page".colorized())
-            .addLoreLines(
-                if (gui.hasNextPage())
-                    ("&3Go to page &b" + (gui.currentPage + 2) + "&7/&c" + gui.pageAmount).colorized()
-                else "&cThere are no more pages".colorized()
-            )
+
+        val displayName = if (gui.hasNextPage()) {
+            "&ePrevious page &8[&b${gui.currentPage - 1}&7/&c${gui.pageAmount}&8]".colorized()
+        } else {
+            "&ePrevious page &8[&b${gui.currentPage}&7/&c${gui.pageAmount}&8]".colorized()
+        }
+
+        builder.setDisplayName(displayName)
+
+        if (!gui.hasPreviousPage()) {
+            builder.addLoreLines("", "&cThere are no more pages".colorized())
+        }
+
         return builder
     }
 

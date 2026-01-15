@@ -10,13 +10,16 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.AbstractItem
+import java.util.Optional
 import java.util.function.Consumer
 
 class OpenInputStringMenuItem(
     val displayName: String = "&e&lInput string",
     val material: Material = XMaterial.NAME_TAG.get() ?: Material.NAME_TAG,
     val title: String,
+    val initialValue: String,
     val onRename: Consumer<String>,
+    val onConfirm: (clickType: ClickType, player: Player, event: InventoryClickEvent) -> Unit = { _, _, _ -> },
     val lores: List<String> = emptyList()) : AbstractItem() {
 
     override fun handleClick(
@@ -24,7 +27,7 @@ class OpenInputStringMenuItem(
         player: Player,
         event: InventoryClickEvent
     ) {
-        InputStringMenu.open(player, title, onRename)
+        InputStringMenu.open(player, title, initialValue, onRename, onConfirm)
     }
 
     override fun getItemProvider(): ItemProvider {

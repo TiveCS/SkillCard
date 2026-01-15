@@ -10,13 +10,20 @@ import xyz.xenondevs.invui.item.impl.controlitem.PageItem
 class NextPageGuiItem : PageItem(true) {
 
     override fun getItemProvider(gui: PagedGui<*>): ItemProvider {
-        val builder = ItemBuilder(Material.GREEN_STAINED_GLASS_PANE)
-        builder.setDisplayName("&aNext page".colorized())
-            .addLoreLines(
-                if (gui.hasNextPage())
-                    ("&aGo to page &b" + (gui.currentPage + 2) + "&7/&c" + gui.pageAmount).colorized()
-                else "&cThere are no more pages".colorized()
-            )
+        val builder = ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
+
+        val displayName = if (gui.hasNextPage()) {
+            "&aNext page &8[&b${gui.currentPage + 1}&7/&c${gui.pageAmount}&8]".colorized()
+        } else {
+            "&aNext page &8[&b${gui.currentPage}&7/&c${gui.pageAmount}&8]".colorized()
+        }
+
+        builder.setDisplayName(displayName)
+
+        if (!gui.hasNextPage()) {
+            builder.addLoreLines("", "&cThere are no more pages".colorized())
+        }
+
         return builder
     }
 

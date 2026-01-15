@@ -68,7 +68,9 @@ object SkillRepository {
                     SkillAbility(
                         skillId = it[SkillAbilityTable.skillId].value,
                         abilityIdentifier = it[SkillAbilityTable.abilityIdentifier],
-                        executionOrder = it[SkillAbilityTable.executionOrder])
+                        executionOrder = it[SkillAbilityTable.executionOrder],
+                        triggerTargetType = it[SkillAbilityTable.triggerTargetType]
+                    )
                 }
 
             abilities += foundAbilities
@@ -77,7 +79,7 @@ object SkillRepository {
         if (skill == null) return null
 
         abilities.forEach { ability ->
-            ability.ability = AbilityRepository.get<Any>(ability.abilityIdentifier)
+            ability.ability = AbilityRepository.get(ability.abilityIdentifier)
         }
 
         skill!!.abilities.addAll(abilities)

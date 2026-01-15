@@ -28,45 +28,55 @@ object SkillCreationMenu {
             .setStructure(
                 "ABCDEF..X"
             )
-            .addIngredient('A', OpenInputStringMenuItem(
-                displayName = "&e&lSet Identifier",
-                material = XMaterial.NAME_TAG.get() ?: Material.NAME_TAG,
-                title =  "Input Skill's Ability Identifier",
-                lores = listOf("&a"),
-                onRename = { input ->
-                    playerSkillDraft.identifier = input
-                    open(viewer)
-                }))
-            .addIngredient('B', OpenInputStringMenuItem(
-                displayName = "&e&lSet Display Name",
-                material = XMaterial.PAPER.get() ?: Material.PAPER,
-                title =  "Input Skill's Ability Display Name",
-                onRename = { input ->
-                    playerSkillDraft.displayName = input
-                    open(viewer)
-                }
-            ))
-            .addIngredient('C', OpenInputStringMenuItem(
-                displayName = "&e&lSet Description",
-                material = XMaterial.PAPER.get() ?: Material.PAPER,
-                title =  "Input Skill's Ability Description",
-                onRename = { input ->
-                    playerSkillDraft.description = input
-                    open(viewer)
-                }
-            ))
-            .addIngredient('D', OpenSelectMaterialMenuItem(
-                "&6&lSet Material",
-                onSelect = { material ->
-                    playerSkillDraft.material = material
-                    open(viewer)
-                }
-            ))
-            .addIngredient('E', OpenSelectTriggerMenuItem(
-                onSelect = { triggerIdentifier ->
-                    TODO()
-                }
-            ))
+            .addIngredient(
+                'A', OpenInputStringMenuItem(
+                    displayName = "&e&lSet Identifier",
+                    material = XMaterial.NAME_TAG.get() ?: Material.NAME_TAG,
+                    title = "Input Skill's Ability Identifier",
+                    initialValue = playerSkillDraft.identifier ?: "",
+                    lores = listOf(" ", "&aCurrent Value:", "&f${playerSkillDraft.identifier ?: "&c&lNot Set"}"),
+                    onRename = { input ->
+                        playerSkillDraft.identifier = input
+                    },
+                    onConfirm = { _, _, _ -> open(viewer) }
+                ))
+            .addIngredient(
+                'B', OpenInputStringMenuItem(
+                    displayName = "&e&lSet Display Name",
+                    material = XMaterial.PAPER.get() ?: Material.PAPER,
+                    title = "Input Skill's Ability Display Name",
+                    initialValue = playerSkillDraft.displayName ?: "",
+                    lores = listOf(" ", "&aCurrent Value:", "&f${playerSkillDraft.displayName ?: "&c&lNot Set"}"),
+                    onRename = { input ->
+                        playerSkillDraft.displayName = input
+                    },
+                    onConfirm = { _, _, _ -> open(viewer) }
+                ))
+            .addIngredient(
+                'C', OpenInputStringMenuItem(
+                    displayName = "&e&lSet Description",
+                    material = XMaterial.PAPER.get() ?: Material.PAPER,
+                    title = "Input Skill's Ability Description",
+                    initialValue = playerSkillDraft.description ?: "",
+                    onRename = { input ->
+                        playerSkillDraft.description = input
+                    },
+                    onConfirm = { _, _, _ -> open(viewer) }
+                ))
+            .addIngredient(
+                'D', OpenSelectMaterialMenuItem(
+                    "&6&lSet Material",
+                    onSelect = { material ->
+                        playerSkillDraft.material = material
+                        open(viewer)
+                    },
+                ))
+            .addIngredient(
+                'E', OpenSelectTriggerMenuItem(
+                    onSelect = { triggerIdentifier ->
+                        TODO()
+                    }
+                ))
             .addIngredient('X', ConfirmSkillCreateItem(playerSkillDraft))
             .build()
 

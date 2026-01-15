@@ -1,6 +1,7 @@
 package com.github.tivecs.skillcard.internal.data.repositories
 
 import com.github.tivecs.skillcard.core.triggers.Trigger
+import com.github.tivecs.skillcard.core.triggers.TriggerAttribute
 import org.bukkit.event.Event
 import java.lang.reflect.ParameterizedType
 
@@ -33,7 +34,7 @@ object TriggerRepository {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <TEvent : Event, TAttribute> get(identifier: String): Trigger<TEvent, TAttribute>{
+    fun <TEvent : Event, TAttribute : TriggerAttribute> get(identifier: String): Trigger<TEvent, TAttribute>{
         val trigger = registeredTriggers[identifier]
             ?: throw IllegalArgumentException("Trigger with identifier '$identifier' not exists.")
 

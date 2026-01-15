@@ -1,6 +1,7 @@
 package com.github.tivecs.skillcard.internal.data.repositories
 
 import com.github.tivecs.skillcard.core.abilities.Ability
+import com.github.tivecs.skillcard.core.abilities.AbilityAttribute
 import org.bukkit.plugin.java.JavaPlugin
 
 object AbilityRepository {
@@ -38,7 +39,7 @@ object AbilityRepository {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <TAttribute> get(identifier: String): Ability<TAttribute> {
+    fun <TAttribute : AbilityAttribute> get(identifier: String): Ability<TAttribute> {
         val ability =
             registeredAbilities[identifier] ?: throw NullPointerException("Ability '${identifier}' was not registered.")
 

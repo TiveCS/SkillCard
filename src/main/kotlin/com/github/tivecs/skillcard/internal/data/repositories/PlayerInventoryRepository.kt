@@ -21,25 +21,25 @@ object PlayerInventoryRepository {
             if (found != null) return found
         }
 
-        val found = PlayerInventoryTable.selectAll().where {
-            PlayerInventoryTable.playerId eq playerId
-        }.map {
-            PlayerInventory(
-                it[PlayerInventoryTable.id].value,
-                it[PlayerInventoryTable.playerId]
-            )
-        }.singleOrNull()
-
-        if (found != null) {
-            cache[playerId] = found
-            return found
-        }
-
         val inventory: PlayerInventory = transaction {
+            val found = PlayerInventoryTable.selectAll()
+                .where { PlayerInventoryTable.playerId eq playerId }
+                .map {
+                    PlayerInventory(
+                        it[PlayerInventoryTable.id].value,
+                        it[PlayerInventoryTable.playerId]
+                    )
+                }.singleOrNull()
+
+            if (found != null) return@transaction found
+
             return@transaction PlayerInventoryTable.insertReturning {
                 it[PlayerInventoryTable.playerId] = playerId
             }.map {
-                PlayerInventory(it[PlayerInventoryTable.id].value, it[PlayerInventoryTable.playerId])
+                PlayerInventory(
+                    it[PlayerInventoryTable.id].value,
+                    it[PlayerInventoryTable.playerId]
+                )
             }.single()
         }
 

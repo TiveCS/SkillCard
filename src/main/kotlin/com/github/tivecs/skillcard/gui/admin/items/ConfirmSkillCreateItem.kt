@@ -2,6 +2,7 @@ package com.github.tivecs.skillcard.gui.admin.items
 
 import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.skills.SkillBuilder
+import com.github.tivecs.skillcard.gui.admin.SkillCreationMenu
 import com.github.tivecs.skillcard.gui.admin.SkillListMenu
 import com.github.tivecs.skillcard.internal.data.repositories.SkillRepository
 import com.github.tivecs.skillcard.internal.extensions.colorized
@@ -30,6 +31,8 @@ class ConfirmSkillCreateItem(val builder: SkillBuilder) : AbstractItem() {
         SkillListMenu.open(player)
 
         player.sendMessage("&eSkill '&b${builder.identifier}&e' has been created successfully!".colorized())
+
+        SkillCreationMenu.invalidate(player.uniqueId)
     }
 
     override fun getItemProvider(): ItemProvider {

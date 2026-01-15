@@ -3,6 +3,7 @@ package com.github.tivecs.skillcard.gui.admin
 import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.skills.SkillBuilder
 import com.github.tivecs.skillcard.gui.admin.items.ConfirmSkillCreateItem
+import com.github.tivecs.skillcard.gui.admin.items.OpenSelectTriggerMenuItem
 import com.github.tivecs.skillcard.gui.common.items.OpenInputStringMenuItem
 import com.github.tivecs.skillcard.gui.common.items.OpenSelectMaterialMenuItem
 import org.bukkit.Material
@@ -15,13 +16,17 @@ import java.util.UUID
 object SkillCreationMenu {
     private val currentDraftSkills = mutableMapOf<UUID, SkillBuilder>()
 
+    fun invalidate(playerId: UUID) {
+        currentDraftSkills.remove(playerId)
+    }
+
     fun open(viewer: Player) {
         val playerSkillDraft = currentDraftSkills[viewer.uniqueId] ?: SkillBuilder()
         currentDraftSkills[viewer.uniqueId] = playerSkillDraft
 
         val gui = Gui.normal()
             .setStructure(
-                "ABCD....X"
+                "ABCDEF..X"
             )
             .addIngredient('A', OpenInputStringMenuItem(
                 displayName = "&e&lSet Identifier",
@@ -55,6 +60,11 @@ object SkillCreationMenu {
                 onSelect = { material ->
                     playerSkillDraft.material = material
                     open(viewer)
+                }
+            ))
+            .addIngredient('E', OpenSelectTriggerMenuItem(
+                onSelect = { triggerIdentifier ->
+                    TODO()
                 }
             ))
             .addIngredient('X', ConfirmSkillCreateItem(playerSkillDraft))

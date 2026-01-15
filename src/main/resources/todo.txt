@@ -1,3 +1,4 @@
+TODO:
 - Add feature to automatically detect the attribute acceptance data type
   (for example: ThunderAbility require location, which supported data type are Entity (got from .location) and Location for now)
 

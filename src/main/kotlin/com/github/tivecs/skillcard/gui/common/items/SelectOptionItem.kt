@@ -1,7 +1,5 @@
-package com.github.tivecs.skillcard.gui.admin.items
+﻿package com.github.tivecs.skillcard.gui.common.items
 
-import com.cryptomorin.xseries.XMaterial
-import com.github.tivecs.skillcard.gui.admin.SkillCreationMenu
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -11,19 +9,23 @@ import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.AbstractItem
 
-class OpenSkillCreateMenuItem(val displayText: String = "&6&lCreate New Skill") : AbstractItem() {
+class SelectOptionItem<TValue>(
+    val material: Material,
+    val displayName: String,
+    val value: TValue,
+    val onSelect: () -> Unit = {}) : AbstractItem() {
+
     override fun handleClick(
         clickType: ClickType,
         player: Player,
         event: InventoryClickEvent
     ) {
-        SkillCreationMenu.open(player)
+        onSelect.invoke()
     }
 
-    override fun getItemProvider(): ItemProvider {
-        val mat = XMaterial.WRITABLE_BOOK.get() ?: Material.WRITABLE_BOOK
-
-        return ItemBuilder(mat)
-            .setDisplayName(displayText.colorized())
+    override fun getItemProvider(): ItemProvider? {
+        return ItemBuilder(material)
+            .setDisplayName(displayName.colorized())
+            .addLoreLines(" ", "&aClick to select this option.".colorized())
     }
 }

@@ -3,9 +3,9 @@ package com.github.tivecs.skillcard.builtin.abilities
 import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.abilities.Ability
 import com.github.tivecs.skillcard.core.abilities.AbilityAttribute
-import com.github.tivecs.skillcard.core.abilities.AbilityAttributeDataType
-import com.github.tivecs.skillcard.core.abilities.AbilityAttributeFieldConfigurable
 import com.github.tivecs.skillcard.core.abilities.AbilityExecuteResultState
+import com.github.tivecs.skillcard.core.abilities.AbilityRequirement
+import com.github.tivecs.skillcard.core.abilities.RequirementSource
 import com.github.tivecs.skillcard.core.skills.SkillAbility
 import com.github.tivecs.skillcard.core.skills.SkillExecutionContext
 import com.github.tivecs.skillcard.core.triggers.TriggerAttributeKey
@@ -20,16 +20,13 @@ enum class IgniteAbilityDurationType {
 
 data class IgniteAbilityAttribute(
     val target: Entity,
-
-    @param:AbilityAttributeFieldConfigurable(AbilityAttributeDataType.INT)
     val duration: Int,
-
-    @param:AbilityAttributeFieldConfigurable(AbilityAttributeDataType.STRING)
     val type: IgniteAbilityDurationType = IgniteAbilityDurationType.SET) : AbilityAttribute {
 
     companion object {
         const val DURATION_KEY = "duration"
         const val TYPE_KEY = "type"
+        const val TARGET_KEY = "target"
     }
 }
 
@@ -72,6 +69,28 @@ object IgniteAbility : Ability<IgniteAbilityAttribute> {
             target,
             duration,
             durationIgniteType,
+        )
+    }
+
+    override fun getRequirements(): List<AbilityRequirement> {
+        return listOf(
+            AbilityRequirement(
+                key = IgniteAbilityAttribute.TYPE_KEY,
+                targetType = String::class,
+                source = RequirementSource.USER_CONFIGURED,
+                defaultValue = IgniteAbilityDurationType.SET.name
+            ),
+            AbilityRequirement(
+                key = IgniteAbilityAttribute.DURATION_KEY,
+                targetType = Int::class,
+                source = RequirementSource.USER_CONFIGURED,
+                defaultValue = 60
+            ),
+            AbilityRequirement(
+                key = IgniteAbilityAttribute.TARGET_KEY,
+                targetType = Entity::class,
+                source = RequirementSource.TRIGGER
+            ),
         )
     }
 

@@ -20,7 +20,7 @@ object InputStringMenu {
 
     fun open(
         viewer: Player,
-        title: String,
+        title: String = "",
         initialValue: String,
         onRename: Consumer<String>,
         onConfirm: (clickType: ClickType, player: Player, event: InventoryClickEvent) -> Unit = { _, _, _ -> }

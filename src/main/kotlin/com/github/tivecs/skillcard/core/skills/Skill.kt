@@ -46,14 +46,14 @@ class Skill {
 
     companion object {
         fun create(
+            skillId: UUID = UUID.randomUUID(),
             identifier: String,
-            abilities: ArrayList<String>,
+            abilities: ArrayList<SkillAbility>,
             material: XMaterial = XMaterial.BOOK,
             displayName: String = identifier.replace("_", " ").trim(),
             description: String = "",
             triggerTargetType: String
         ): Skill {
-            val skillId = UUID.randomUUID()
             var executionOrder = 1
 
             return Skill(skillId).apply {
@@ -62,11 +62,7 @@ class Skill {
                 this.description = description
                 this.material = material
 
-                this.abilities.addAll(abilities.map { abilityIdentifier ->
-                    SkillAbility(skillId, abilityIdentifier, executionOrder, triggerTargetType).also {
-                        executionOrder++
-                    }
-                })
+                this.abilities.addAll(abilities)
             }
         }
     }

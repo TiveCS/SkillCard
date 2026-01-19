@@ -4,6 +4,8 @@ import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.abilities.Ability
 import com.github.tivecs.skillcard.core.abilities.AbilityAttribute
 import com.github.tivecs.skillcard.core.abilities.AbilityExecuteResultState
+import com.github.tivecs.skillcard.core.abilities.AbilityRequirement
+import com.github.tivecs.skillcard.core.abilities.RequirementSource
 import com.github.tivecs.skillcard.core.skills.SkillAbility
 import com.github.tivecs.skillcard.core.skills.SkillExecutionContext
 import com.github.tivecs.skillcard.core.triggers.TriggerAttributeKey
@@ -35,6 +37,7 @@ data class ShootProjectileAbilityAttribute(
 
     companion object {
         const val PROJECTILE_TYPE = "projectile_type"
+        const val SHOOTER = "target"
     }
 }
 
@@ -68,5 +71,22 @@ object ShootProjectileAbility : Ability<ShootProjectileAbilityAttribute> {
         val projectileType = ShootableProjectileType.valueOf(projectileTypeStr.uppercase())
 
         return ShootProjectileAbilityAttribute(shooter, projectileType)
+    }
+
+    override fun getRequirements(): List<AbilityRequirement> {
+        return listOf(
+            AbilityRequirement(
+                key = ShootProjectileAbilityAttribute.PROJECTILE_TYPE,
+                targetType = ShootableProjectileType::class,
+                source = RequirementSource.USER_CONFIGURED,
+                defaultValue = ShootableProjectileType.ARROW,
+                choices = ShootableProjectileType.entries.map { it.name }
+            ),
+            AbilityRequirement(
+                key = ShootProjectileAbilityAttribute.SHOOTER,
+                targetType = ProjectileSource::class,
+                source = RequirementSource.TRIGGER
+            ),
+        )
     }
 }

@@ -26,6 +26,8 @@ interface Ability<TAttribute> where TAttribute : AbilityAttribute {
 
     fun <TEvent : Event> createAttribute(context: SkillExecutionContext<TEvent>, skillAbility: SkillAbility): TAttribute?
 
+    fun getRequirements(): List<AbilityRequirement>
+
     fun displayItem(): ItemStack {
         val mat = material
         val item = ItemStack(mat)

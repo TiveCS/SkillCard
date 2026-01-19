@@ -4,11 +4,14 @@ import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.skills.SkillBuilder
 import com.github.tivecs.skillcard.gui.admin.items.ConfirmSkillCreateItem
 import com.github.tivecs.skillcard.gui.admin.items.OpenSelectTriggerMenuItem
+import com.github.tivecs.skillcard.gui.admin.items.OpenSkillListedAbilitiesMenuItem
 import com.github.tivecs.skillcard.gui.common.items.OpenInputStringMenuItem
 import com.github.tivecs.skillcard.gui.common.items.OpenSelectMaterialMenuItem
+import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import xyz.xenondevs.invui.gui.Gui
+import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 import xyz.xenondevs.invui.window.Window
 import java.util.UUID
@@ -26,8 +29,12 @@ object SkillCreationMenu {
 
         val gui = Gui.normal()
             .setStructure(
-                "ABCDEF..X"
+                "ABCDEF...",
+                "#########",
+                "0.......X"
             )
+            .addIngredient('0', SimpleItem(ItemBuilder(Material.TNT)
+                .setDisplayName("&c&lReset Skill Creation".colorized())))
             .addIngredient(
                 'A', OpenInputStringMenuItem(
                     displayName = "&e&lSet Identifier",
@@ -36,7 +43,7 @@ object SkillCreationMenu {
                     initialValue = playerSkillDraft.identifier ?: "",
                     lores = listOf(" ", "&aCurrent Value:", "&f${playerSkillDraft.identifier ?: "&c&lNot Set"}"),
                     onRename = { input ->
-                        playerSkillDraft.identifier = input
+                        playerSkillDraft.setIdentifier(input)
                     },
                     onConfirm = { _, _, _ -> open(viewer) }
                 ))
@@ -48,7 +55,7 @@ object SkillCreationMenu {
                     initialValue = playerSkillDraft.displayName ?: "",
                     lores = listOf(" ", "&aCurrent Value:", "&f${playerSkillDraft.displayName ?: "&c&lNot Set"}"),
                     onRename = { input ->
-                        playerSkillDraft.displayName = input
+                        playerSkillDraft.setDisplayName(input)
                     },
                     onConfirm = { _, _, _ -> open(viewer) }
                 ))
@@ -59,7 +66,7 @@ object SkillCreationMenu {
                     title = "Input Skill's Ability Description",
                     initialValue = playerSkillDraft.description ?: "",
                     onRename = { input ->
-                        playerSkillDraft.description = input
+                        playerSkillDraft.setDescription(input)
                     },
                     onConfirm = { _, _, _ -> open(viewer) }
                 ))
@@ -67,16 +74,11 @@ object SkillCreationMenu {
                 'D', OpenSelectMaterialMenuItem(
                     "&6&lSet Material",
                     onSelect = { material ->
-                        playerSkillDraft.material = material
+                        playerSkillDraft.setMaterial(material)
                         open(viewer)
                     },
                 ))
-            .addIngredient(
-                'E', OpenSelectTriggerMenuItem(
-                    onSelect = { triggerIdentifier ->
-                        TODO()
-                    }
-                ))
+            .addIngredient('E', OpenSkillListedAbilitiesMenuItem(playerSkillDraft))
             .addIngredient('X', ConfirmSkillCreateItem(playerSkillDraft))
             .build()
 

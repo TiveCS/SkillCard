@@ -12,11 +12,11 @@ import org.bukkit.event.Event
 data class HealAbilityAttribute(
     val target: LivingEntity,
 
-    @param:AbilityAttributeFieldConfigurable(AbilityAttributeDataType.DOUBLE)
     val amount: Double) : AbilityAttribute {
 
     companion object {
         const val AMOUNT_KEY = "amount"
+        const val TARGET_KEY = "target"
     }
 }
 
@@ -51,5 +51,21 @@ object HealAbility : Ability<HealAbilityAttribute>  {
         val healAmount = skillAbility.abilityAttributes[HealAbilityAttribute.AMOUNT_KEY] as? Double ?: return null
 
         return HealAbilityAttribute(targetToHeal, healAmount)
+    }
+
+    override fun getRequirements(): List<AbilityRequirement> {
+        return listOf(
+            AbilityRequirement(
+                key = HealAbilityAttribute.AMOUNT_KEY,
+                targetType = Double::class,
+                source = RequirementSource.USER_CONFIGURED,
+                defaultValue = 2.0
+            ),
+            AbilityRequirement(
+                key = HealAbilityAttribute.TARGET_KEY,
+                targetType = LivingEntity::class,
+                source = RequirementSource.TRIGGER
+            ),
+        )
     }
 }

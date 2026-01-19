@@ -4,6 +4,8 @@ import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.abilities.Ability
 import com.github.tivecs.skillcard.core.abilities.AbilityAttribute
 import com.github.tivecs.skillcard.core.abilities.AbilityExecuteResultState
+import com.github.tivecs.skillcard.core.abilities.AbilityRequirement
+import com.github.tivecs.skillcard.core.abilities.RequirementSource
 import com.github.tivecs.skillcard.core.skills.SkillAbility
 import com.github.tivecs.skillcard.core.skills.SkillExecutionContext
 import com.github.tivecs.skillcard.core.triggers.TriggerAttributeKey
@@ -17,12 +19,14 @@ data class PotionEffectAbilityAttribute(
     val type: PotionEffectType,
     val duration: Int,
     val amplifier: Int,
-    val target: LivingEntity) : AbilityAttribute {
+    val target: LivingEntity
+) : AbilityAttribute {
 
     companion object {
         const val TYPE_KEY = "type"
         const val DURATION_KEY = "duration"
         const val AMPLIFIER_KEY = "amplifier"
+        const val TARGET_KEY = "target"
     }
 }
 
@@ -58,18 +62,50 @@ object PotionEffectAbility : Ability<PotionEffectAbilityAttribute> {
         val trigger = context.skillBookContext.getTrigger()
         val triggerResult = context.skillBookContext.getTriggerResult()
 
-        val target = trigger.getTarget(triggerResult, TriggerAttributeKey.TARGET_TYPE.key) as? LivingEntity ?: return null
+        val target =
+            trigger.getTarget(triggerResult, TriggerAttributeKey.TARGET_TYPE.key) as? LivingEntity ?: return null
 
-        val potionTypeStr = skillAbility.abilityAttributes[PotionEffectAbilityAttribute.TYPE_KEY] as? String ?: return null
+        val potionTypeStr =
+            skillAbility.abilityAttributes[PotionEffectAbilityAttribute.TYPE_KEY] as? String ?: return null
         val potionType = PotionEffectType.getByName(potionTypeStr.uppercase()) ?: return null
         val duration = skillAbility.abilityAttributes[PotionEffectAbilityAttribute.DURATION_KEY] as? Int ?: return null
-        val amplifier = skillAbility.abilityAttributes[PotionEffectAbilityAttribute.AMPLIFIER_KEY] as? Int ?: return null
+        val amplifier =
+            skillAbility.abilityAttributes[PotionEffectAbilityAttribute.AMPLIFIER_KEY] as? Int ?: return null
 
         return PotionEffectAbilityAttribute(
             potionType,
             duration,
             amplifier,
             target
+        )
+    }
+
+    override fun getRequirements(): List<AbilityRequirement> {
+        return listOf(
+            AbilityRequirement(
+                key = PotionEffectAbilityAttribute.TYPE_KEY,
+                targetType = String::class,
+                source = RequirementSource.USER_CONFIGURED,
+                defaultValue = PotionEffectType.SPEED,
+                choices = PotionEffectType.values().map { it.name }
+            ),
+            AbilityRequirement(
+                key = PotionEffectAbilityAttribute.AMPLIFIER_KEY,
+                targetType = Int::class,
+                source = RequirementSource.USER_CONFIGURED,
+                defaultValue = 1
+            ),
+            AbilityRequirement(
+                key = PotionEffectAbilityAttribute.DURATION_KEY,
+                targetType = Int::class,
+                source = RequirementSource.USER_CONFIGURED,
+                defaultValue = 200
+            ),
+            AbilityRequirement(
+                key = PotionEffectAbilityAttribute.TARGET_KEY,
+                targetType = LivingEntity::class,
+                source = RequirementSource.TRIGGER
+            ),
         )
     }
 

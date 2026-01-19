@@ -4,6 +4,8 @@ import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.abilities.Ability
 import com.github.tivecs.skillcard.core.abilities.AbilityAttribute
 import com.github.tivecs.skillcard.core.abilities.AbilityExecuteResultState
+import com.github.tivecs.skillcard.core.abilities.AbilityRequirement
+import com.github.tivecs.skillcard.core.abilities.RequirementSource
 import com.github.tivecs.skillcard.core.skills.SkillAbility
 import com.github.tivecs.skillcard.core.skills.SkillExecutionContext
 import com.github.tivecs.skillcard.core.triggers.TriggerAttributeKey
@@ -58,4 +60,13 @@ object ThunderAbility : Ability<ThunderAbilityAttribute> {
         return ThunderAbilityAttribute(targetLocation)
     }
 
+    override fun getRequirements(): List<AbilityRequirement> {
+        return listOf(
+            AbilityRequirement(
+                key = ThunderAbilityAttribute.LOCATION_KEY,
+                targetType = Location::class,
+                source = RequirementSource.TRIGGER,
+            )
+        )
+    }
 }

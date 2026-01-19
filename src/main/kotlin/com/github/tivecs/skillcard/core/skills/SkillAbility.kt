@@ -11,16 +11,20 @@ class SkillAbility {
     val skillId: UUID
     val abilityIdentifier: String
     var executionOrder: Int
-    val triggerTargetType: String
-    val abilityAttributes: Map<String, Any> = mapOf()
+    val abilityAttributes: Map<String, Any>
 
     lateinit var ability: Ability<AbilityAttribute>
 
-    constructor(skillId: UUID, abilityIdentifier: String, executionOrder: Int, triggerTargetType: String) {
+    constructor(
+        skillId: UUID,
+        abilityIdentifier: String,
+        executionOrder: Int,
+        abilityAttributes: Map<String, Any> = mutableMapOf()) {
+
         this.skillId = skillId
         this.abilityIdentifier = abilityIdentifier
         this.executionOrder = executionOrder
-        this.triggerTargetType = triggerTargetType
+        this.abilityAttributes = abilityAttributes
     }
 
     fun <TEvent : Event> execute(context: SkillExecutionContext<TEvent>) {

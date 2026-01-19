@@ -5,16 +5,19 @@ import com.github.tivecs.skillcard.core.abilities.*
 import com.github.tivecs.skillcard.core.skills.SkillAbility
 import com.github.tivecs.skillcard.core.skills.SkillExecutionContext
 import com.github.tivecs.skillcard.core.triggers.TriggerAttributeKey
+import com.github.tivecs.skillcard.gui.common.InputNumberMenu
 import org.bukkit.Material
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Event
 
 data class DamageAbilityAttribute(
     val amount: Double,
-    val target: LivingEntity) : AbilityAttribute {
+    val target: LivingEntity
+) : AbilityAttribute {
 
-    companion object  {
+    companion object {
         const val AMOUNT_KEY = "amount"
+        const val TARGET_KEY = "target"
     }
 }
 
@@ -38,14 +41,34 @@ object DamageAbility : Ability<DamageAbilityAttribute> {
         return AbilityExecuteResultState.EXECUTED
     }
 
-    override fun <TEvent : Event> createAttribute(context: SkillExecutionContext<TEvent>, skillAbility: SkillAbility): DamageAbilityAttribute? {
+    override fun <TEvent : Event> createAttribute(
+        context: SkillExecutionContext<TEvent>,
+        skillAbility: SkillAbility
+    ): DamageAbilityAttribute? {
         val trigger = context.skillBookContext.triggerContext.trigger
         val triggerResult = context.skillBookContext.triggerContext.triggerResult
 
-        val target = trigger.getTarget(triggerResult, TriggerAttributeKey.TARGET_TYPE.key) as? LivingEntity ?: return null
+        val target =
+            trigger.getTarget(triggerResult, TriggerAttributeKey.TARGET_TYPE.key) as? LivingEntity ?: return null
         val damageAmount = skillAbility.abilityAttributes[DamageAbilityAttribute.AMOUNT_KEY] as? Double ?: return null
 
         return DamageAbilityAttribute(damageAmount, target)
+    }
+
+    override fun getRequirements(): List<AbilityRequirement> {
+        return listOf(
+            AbilityRequirement(
+                key = DamageAbilityAttribute.AMOUNT_KEY,
+                targetType = Double::class,
+                source = RequirementSource.USER_CONFIGURED,
+                defaultValue = 2.0
+            ),
+            AbilityRequirement(
+                key = DamageAbilityAttribute.TARGET_KEY,
+                targetType = LivingEntity::class,
+                source = RequirementSource.TRIGGER,
+            ),
+        )
     }
 
 }

@@ -8,28 +8,54 @@ SkillCard is a Minecraft Spigot/Paper plugin that provides a Wynncraft-inspired 
 
 ---
 
-## Core Architecture
+## Core Architecture (core2 - WIP)
+
+Migration in progress from `core` to `core2` package.
 
 ### Skill System Hierarchy
 
 ```
-SkillBook (player holds this)
-└── Skill
-    └── SkillAbility (links to Ability with attributes)
-        └── Ability (Thunder, Heal, PotionEffect, etc.)
-            └── AbilityAttribute (execution parameters)
+SkillBook
+└── TriggerSkillSet (one per trigger)
+    ├── Trigger (OnDamage, Pattern, etc.)
+    ├── TriggerModifier (chance, cooldown, cost) [planned]
+    └── Skills[]
+        └── Skill
+            ├── SkillTargetSlot[] (defines expected target types)
+            └── SkillAbility[]
+                ├── targetSlotIdentifier (references which slot)
+                ├── ability reference
+                └── attributes (user configured values)
 ```
 
-### Key Classes
+### Key Classes (core2/entities/)
 
 | Class | Purpose |
 |-------|---------|
-| `Skill` | Definition of a skill with abilities |
-| `SkillBook` | Player-holdable item containing a skill |
-| `SkillAbility` | Links skill to ability with configured attributes |
-| `Ability<TAttribute>` | Base interface for all abilities |
-| `AbilityAttribute` | Data required to execute an ability |
-| `Trigger` | When skill activates (OnAttack, Pattern, etc.) |
+| `SkillBook` | Player-holdable item, contains TriggerSkillSets |
+| `TriggerSkillSet` | Links trigger + skills for that trigger |
+| `TriggerTargetSlotSource` | Maps skill's target slot to trigger's available target |
+| `Skill` | Contains abilities and target slots |
+| `SkillAbility` | References ability + target slot + configured attributes |
+| `SkillTargetSlot` | Declares expected target type for abilities |
+| `Trigger<TEvent>` | Abstract class with `handle()` and `getAvailableTargets()` |
+| `AvailableTriggerTarget` | Declares what targets a trigger provides (key, outputType, getOutput lambda) |
+| `Ability<TAttribute>` | Interface with `targetRequirement` + `configurableRequirements` |
+
+### Execution Flow
+
+```
+1. Player triggers event (e.g., attacks)
+2. Trigger.handle(event) → TriggerExecutionResult
+3. SkillBook.execute(triggerResult)
+4. Find matching TriggerSkillSet by trigger identifier
+5. For each Skill in set:
+   - Get TriggerTargetSlotSource mappings
+   - For each SkillAbility:
+     - Resolve target from slot source
+     - Create attribute via TypeConverters
+     - Execute ability
+```
 
 ---
 
@@ -132,22 +158,35 @@ Pattern "R-R-L" → [Slot 1: Thunder, Slot 3: Heal] → Both execute!
 
 ```
 src/main/kotlin/com/github/tivecs/skillcard/
-├── builtin/
-│   └── abilities/          # Built-in ability implementations
+├── builtin/                # Old builtin (being migrated)
+│   └── abilities/
+├── builtin2/               # New builtin for core2
+│   ├── abilities/
+│   └── triggers/
 ├── cmds/                   # Commands (admin, player)
-├── core/
-│   ├── abilities/          # Ability interfaces & base classes
-│   ├── books/              # SkillBook system
-│   ├── player/             # Player event handling
-│   ├── skills/             # Skill, SkillAbility, SkillBuilder
-│   └── triggers/           # Trigger system
+├── core/                   # Old architecture (being migrated)
+│   ├── abilities/
+│   ├── books/
+│   ├── converters/         # TypeConverters (shared)
+│   ├── player/
+│   ├── skills/
+│   └── triggers/
+├── core2/                  # NEW architecture (WIP)
+│   ├── builtin/
+│   │   ├── abilities/      # DamageAbility, ThunderAbility
+│   │   └── triggers/       # OnDamageTrigger
+│   └── entities/
+│       ├── abilities/      # Ability interface
+│       ├── books/          # SkillBook, TriggerSkillSet, TriggerTargetSlotSource
+│       ├── skills/         # Skill, SkillAbility, SkillTargetSlot
+│       └── triggers/       # Trigger, AvailableTriggerTarget, TriggerExecutionResult
 ├── gui/
 │   └── admin/              # Admin GUI menus
 │       └── items/          # Menu items
 └── internal/
-    ├── data/tables/        # Database tables
-    ├── exceptions/         # Custom exceptions
-    └── extensions/         # Kotlin extensions
+    ├── data/tables/        # Database tables (SQLite only, MySQL not tested)
+    ├── exceptions/
+    └── extensions/
 
 docs/
 ├── type-converters.md      # Type converter system documentation
@@ -161,7 +200,7 @@ docs/
 - **Language:** Kotlin
 - **Platform:** Spigot/Paper API
 - **GUI:** Custom inventory-based menus
-- **Database:** (check internal/data/tables)
+- **Database:** SQLite only (MySQL not tested)
 - **Dependencies:** XSeries (cross-version materials)
 
 ---

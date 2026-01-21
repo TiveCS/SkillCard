@@ -1,7 +1,6 @@
 ﻿package com.github.tivecs.skillcard.gui.admin.items
 
 import com.github.tivecs.skillcard.core.abilities.Ability
-import com.github.tivecs.skillcard.core.abilities.AbilityAttribute
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType

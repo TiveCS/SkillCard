@@ -1,6 +1,6 @@
 ﻿package com.github.tivecs.skillcard.core.converters
 
-import com.github.tivecs.skillcard.builtin.abilities.ShootableProjectileType
+import com.github.tivecs.skillcard.core.builtin.abilities.DashAbilityDirection
 import org.bukkit.Location
 import org.bukkit.block.Block
 import org.bukkit.entity.Entity
@@ -39,7 +39,10 @@ object TypeConverters {
 
         // String to enums
         register(String::class, PotionEffectType::class) { PotionEffectType.getByName(it.uppercase()) }
-        register(String::class, ShootableProjectileType::class) { ShootableProjectileType.valueOf(it.uppercase()) }
+        register(PotionEffectType::class, PotionEffectType::class) { it }
+
+        register(String::class, DashAbilityDirection::class) { DashAbilityDirection.valueOf(it.uppercase()) }
+        register(DashAbilityDirection::class, DashAbilityDirection::class) { it }
     }
 
     private fun <TSource : Any, TTarget : Any> register(

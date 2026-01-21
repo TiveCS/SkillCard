@@ -1,6 +1,6 @@
 ﻿package com.github.tivecs.skillcard.gui.admin.items
 
-import com.github.tivecs.skillcard.core.abilities.AbilityRequirement
+import com.github.tivecs.skillcard.core.entities.abilities.AbilityRequirement
 import com.github.tivecs.skillcard.core.skills.SkillAbilityBuilder
 import com.github.tivecs.skillcard.core.skills.SkillBuilder
 import com.github.tivecs.skillcard.gui.admin.ConfigureSkillAbilityAttributeMenu

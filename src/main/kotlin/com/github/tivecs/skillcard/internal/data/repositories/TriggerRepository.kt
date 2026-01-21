@@ -1,16 +1,15 @@
 package com.github.tivecs.skillcard.internal.data.repositories
 
-import com.github.tivecs.skillcard.core.triggers.Trigger
-import com.github.tivecs.skillcard.core.triggers.TriggerAttribute
+import com.github.tivecs.skillcard.core.entities.triggers.Trigger
 import org.bukkit.event.Event
 import java.lang.reflect.ParameterizedType
 
 object TriggerRepository {
 
-    val registeredTriggers = mutableMapOf<String, Trigger<*, *>>()
-    val groupedTriggersByEvent = mutableMapOf<Class<out Event>, List<Trigger<*, *>>>()
+    val registeredTriggers = mutableMapOf<String, Trigger<*>>()
+    val groupedTriggersByEvent = mutableMapOf<Class<out Event>, List<Trigger<*>>>()
 
-    fun register(vararg triggers: Trigger<*, *>) {
+    fun register(vararg triggers: Trigger<*>) {
         triggers.forEach { trigger ->
             if (registeredTriggers.containsKey(trigger.identifier))
                 throw IllegalArgumentException("Trigger with identifier '${trigger.identifier}' already exists.")
@@ -31,18 +30,5 @@ object TriggerRepository {
                 throw IllegalStateException("Could not extract event class from trigger '${trigger.identifier}'")
             }
         }
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    fun <TEvent : Event, TAttribute : TriggerAttribute> get(identifier: String): Trigger<TEvent, TAttribute>{
-        val trigger = registeredTriggers[identifier]
-            ?: throw IllegalArgumentException("Trigger with identifier '$identifier' not exists.")
-
-        return trigger as Trigger<TEvent, TAttribute>
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    fun <TEvent : Event> getByEventClass(eventClass: Class<TEvent>): List<Trigger<TEvent, *>> {
-        return groupedTriggersByEvent[eventClass] as? List<Trigger<TEvent, *>> ?: emptyList()
     }
 }

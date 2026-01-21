@@ -1,7 +1,7 @@
 package com.github.tivecs.skillcard.internal.data.repositories
 
-import com.github.tivecs.skillcard.core.abilities.Ability
-import com.github.tivecs.skillcard.core.abilities.AbilityAttribute
+import com.github.tivecs.skillcard.core.entities.abilities.Ability
+import com.github.tivecs.skillcard.core.entities.abilities.AbilityAttribute
 import org.bukkit.plugin.java.JavaPlugin
 
 object AbilityRepository {

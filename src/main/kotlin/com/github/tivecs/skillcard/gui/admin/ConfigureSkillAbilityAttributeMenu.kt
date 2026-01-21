@@ -1,8 +1,7 @@
 ﻿package com.github.tivecs.skillcard.gui.admin
 
 import com.github.tivecs.skillcard.core.abilities.Ability
-import com.github.tivecs.skillcard.core.abilities.AbilityAttribute
-import com.github.tivecs.skillcard.core.abilities.RequirementSource
+import com.github.tivecs.skillcard.core.entities.abilities.RequirementSource
 import com.github.tivecs.skillcard.core.skills.SkillAbilityBuilder
 import com.github.tivecs.skillcard.core.skills.SkillBuilder
 import com.github.tivecs.skillcard.gui.admin.items.ConfirmConfigureAbilityItem

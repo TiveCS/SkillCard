@@ -23,6 +23,5 @@ class OpenSkillTriggerTargetSlotMenuItem(val builder: SkillBuilder) : AbstractIt
         return ItemBuilder(Material.PRISMARINE_SHARD)
             .setDisplayName("&3&lEdit Trigger Target Slot".colorized())
             .addLoreLines(" ")
-            .addLoreLines("&fRegistered &c${builder.} &ftarget slots for this trigger.".colorized())
     }
 }

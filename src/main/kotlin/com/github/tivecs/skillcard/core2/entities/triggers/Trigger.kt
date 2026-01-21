@@ -6,9 +6,10 @@ abstract class Trigger<TEvent : Event> {
 
     abstract val identifier: String
 
-    abstract fun handle(event: TEvent): TriggerExecutionResult
+    abstract val availableTargets: List<AvailableTriggerTarget<TEvent, *>>
 
-    abstract fun getAvailableTargets(): List<AvailableTriggerTarget<TEvent, *>>
+
+    abstract fun handle(event: TEvent): TriggerExecutionResult
 
     @Suppress("UNCHECKED_CAST")
     internal fun conditionNotMet(): TriggerExecutionResult {

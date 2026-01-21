@@ -69,7 +69,6 @@ object SkillRepository {
                         skillId = it[SkillAbilityTable.skillId].value,
                         abilityIdentifier = it[SkillAbilityTable.abilityIdentifier],
                         executionOrder = it[SkillAbilityTable.executionOrder],
-                        triggerTargetType = it[SkillAbilityTable.triggerTargetType]
                     )
                 }
 

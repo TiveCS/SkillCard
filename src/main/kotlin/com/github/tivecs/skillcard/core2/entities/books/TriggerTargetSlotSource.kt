@@ -10,7 +10,9 @@ class TriggerTargetSlotSource(val targetSlotIdentifier: String, val skillIdentif
     lateinit var targetKey: String
 
     lateinit var triggerSkillSet: TriggerSkillSet
+
     lateinit var skill: Skill
+
     lateinit var targetSlot: SkillTargetSlot
 
     fun getTarget(triggerExecutionResult: TriggerExecutionResult): Any? {
@@ -19,7 +21,7 @@ class TriggerTargetSlotSource(val targetSlotIdentifier: String, val skillIdentif
         if (triggerExecutionResult.status != TriggerExecutionResultStatus.EXECUTED) return null
         if (event == null) return null
 
-        val targetGetter = triggerSkillSet.trigger.getAvailableTargets().singleOrNull { it.key == targetKey }
+        val targetGetter = triggerSkillSet.trigger.availableTargets.singleOrNull { it.key == targetKey }
         if (targetGetter == null) return null
 
         return targetGetter.getOutput.invoke(event)

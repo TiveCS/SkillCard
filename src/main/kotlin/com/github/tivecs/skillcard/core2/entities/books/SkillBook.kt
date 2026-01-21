@@ -1,15 +1,15 @@
 package com.github.tivecs.skillcard.core2.entities.books
 
+import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core2.entities.triggers.TriggerExecutionResult
 import com.github.tivecs.skillcard.core2.entities.triggers.TriggerExecutionResultStatus
-import org.bukkit.Material
 
 class SkillBook {
 
     lateinit var name: String
     lateinit var displayName: String
     lateinit var description: String
-    lateinit var material: Material
+    lateinit var material: XMaterial
 
     val skillSets = arrayListOf<TriggerSkillSet>()
 

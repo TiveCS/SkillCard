@@ -1,6 +1,7 @@
 package com.github.tivecs.skillcard.gui.admin.mutateskill.items
 
 import com.github.tivecs.skillcard.core.builders.skill.SkillBuilder
+import com.github.tivecs.skillcard.core.entities.skills.Skill
 import com.github.tivecs.skillcard.gui.admin.mutateskill.MutateSkillMenu
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
@@ -13,7 +14,7 @@ import xyz.xenondevs.invui.item.impl.AbstractItem
 
 class ConfirmCreateSkillItem(
     val builder: SkillBuilder,
-    val onPostCreate: () -> Unit = { }
+    val onPostCreate: (skill: Skill) -> Unit = { }
 ) : AbstractItem() {
 
     override fun handleClick(
@@ -29,7 +30,7 @@ class ConfirmCreateSkillItem(
         val skill = builder.build()
 
         MutateSkillMenu.invalidate(player)
-        onPostCreate.invoke()
+        onPostCreate.invoke(skill)
     }
 
     override fun getItemProvider(): ItemProvider {

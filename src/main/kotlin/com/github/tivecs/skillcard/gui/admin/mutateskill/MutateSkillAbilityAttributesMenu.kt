@@ -1,6 +1,7 @@
 package com.github.tivecs.skillcard.gui.admin.mutateskill
 
 import com.github.tivecs.skillcard.core.builders.skill.SkillAbilityBuilder
+import com.github.tivecs.skillcard.gui.admin.mutateskill.items.ConfirmAddSkillAbilityItem
 import com.github.tivecs.skillcard.gui.admin.mutateskill.items.EditSkillAbilityAttributeValueItem
 import com.github.tivecs.skillcard.gui.admin.mutateskill.items.OpenSkillAbilityListMenuItem
 import org.bukkit.entity.Player
@@ -16,7 +17,7 @@ object MutateSkillAbilityAttributesMenu {
             EditSkillAbilityAttributeValueItem(
                 abilityBuilder = abilityBuilder,
                 requirement = it,
-                initialValue = it.defaultValue,
+                initialValue = abilityBuilder.attributes[it.key] ?: it.defaultValue,
                 onValueChange = { input -> abilityBuilder.setAttributeValue(it, input) },
                 onConfirm = {
                     open(viewer, abilityBuilder)
@@ -39,6 +40,7 @@ object MutateSkillAbilityAttributesMenu {
                     skillBuilder = abilityBuilder.skillBuilder
                 )
             )
+            .addIngredient('S', ConfirmAddSkillAbilityItem(abilityBuilder))
             .setContent(attributeItems)
             .build()
 

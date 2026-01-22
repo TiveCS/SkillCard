@@ -1,7 +1,6 @@
 package com.github.tivecs.skillcard.cmds
 
-import com.github.tivecs.skillcard.gui.admin.SkillAdminManageMenu
-import com.github.tivecs.skillcard.internal.data.repositories.SkillRepository
+import com.github.tivecs.skillcard.gui.admin.mutateskill.MutateSkillMenu
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -19,14 +18,14 @@ class SkillCardAdminCommand : CommandExecutor {
     ): Boolean {
         if (args.isNullOrEmpty()) {
             if (sender is Player) {
-                SkillAdminManageMenu.open(sender)
+                MutateSkillMenu.open(sender)
             }
             return true
         }
 
         if (args[0] == "manage") {
             if (sender is Player) {
-                SkillAdminManageMenu.open(sender)
+                MutateSkillMenu.open(sender)
             }
             return true
         }

@@ -1,7 +1,7 @@
-package com.github.tivecs.skillcard.gui.common.items
+package com.github.tivecs.skillcard.gui.admin.common.items
 
-import com.cryptomorin.xseries.XMaterial
-import com.github.tivecs.skillcard.gui.common.MaterialSelectionMenu
+import com.github.tivecs.skillcard.core.entities.abilities.Ability
+import com.github.tivecs.skillcard.gui.admin.common.SelectAbilityMenu
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -12,17 +12,22 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.AbstractItem
 import java.util.function.Consumer
 
-class OpenSelectMaterialMenuItem(val displayText: String, val onSelect: Consumer<XMaterial>) : AbstractItem() {
+class OpenSelectAbilityMenuItem(
+    val displayText: String = "&cSelect Ability",
+    val onSelect: Consumer<Ability<*>>,
+    val backItem: AbstractItem? = null
+) : AbstractItem() {
+
     override fun handleClick(
         clickType: ClickType,
         player: Player,
         event: InventoryClickEvent
     ) {
-        MaterialSelectionMenu.open(player, displayText, onSelect)
+        SelectAbilityMenu.open(player, onSelect, backItem = backItem)
     }
 
     override fun getItemProvider(): ItemProvider {
-        return ItemBuilder(Material.GRASS_BLOCK)
-            .setDisplayName(displayText.colorized())
+        return ItemBuilder(Material.BLAZE_POWDER).setDisplayName(displayText.colorized())
     }
+
 }

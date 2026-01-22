@@ -5,9 +5,15 @@ import com.github.tivecs.skillcard.core.entities.abilities.Ability
 import com.github.tivecs.skillcard.core.entities.books.TriggerTargetSlotSource
 import com.github.tivecs.skillcard.core.entities.triggers.TriggerExecutionResult
 import com.github.tivecs.skillcard.core.entities.triggers.TriggerExecutionResultStatus
+import com.google.gson.Gson
+import com.google.gson.JsonSerializer
 import org.bukkit.event.Event
 
 class SkillAbility {
+
+    companion object {
+        private val gson = Gson()
+    }
 
     lateinit var abilityIdentifier: String
     var targetSlotIdentifier: String? = null
@@ -30,6 +36,10 @@ class SkillAbility {
         val attribute = ability.createAttribute<Event>(attributes, target, triggerResult) ?: return
 
         ability.execute(attribute)
+    }
+
+    fun attributesToJsonString(): String {
+        return gson.toJson(attributes)
     }
 
 }

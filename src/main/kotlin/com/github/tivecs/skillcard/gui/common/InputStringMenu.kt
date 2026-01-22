@@ -1,19 +1,15 @@
 package com.github.tivecs.skillcard.gui.common
 
-import com.github.tivecs.skillcard.gui.common.items.BorderGuiItem
 import com.github.tivecs.skillcard.gui.common.items.ConfirmInputStringItem
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.inventory.AnvilInventory
 import xyz.xenondevs.invui.gui.Gui
-import xyz.xenondevs.invui.gui.set
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 import xyz.xenondevs.invui.window.AnvilWindow
-import java.util.Optional
 import java.util.function.Consumer
 
 object InputStringMenu {

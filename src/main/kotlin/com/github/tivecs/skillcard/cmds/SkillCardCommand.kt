@@ -1,6 +1,5 @@
 package com.github.tivecs.skillcard.cmds
 
-import com.github.tivecs.skillcard.internal.data.repositories.PlayerInventoryRepository
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor

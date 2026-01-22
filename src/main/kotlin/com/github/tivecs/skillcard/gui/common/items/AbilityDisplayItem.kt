@@ -1,6 +1,6 @@
 ﻿package com.github.tivecs.skillcard.gui.common.items
 
-import com.github.tivecs.skillcard.core.abilities.Ability
+import com.github.tivecs.skillcard.core.entities.abilities.Ability
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
 import xyz.xenondevs.invui.item.builder.ItemBuilder

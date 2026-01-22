@@ -31,7 +31,6 @@ class TriggerEventListener : Listener {
 
             val targetSlot1 = SkillTargetSlot(
                 identifier = "target_1",
-                skillIdentifier = "test_skill",
             ).apply {
                 targetAbilities = mutableListOf()
             }

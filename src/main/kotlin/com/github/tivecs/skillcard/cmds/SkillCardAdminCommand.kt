@@ -1,6 +1,7 @@
 package com.github.tivecs.skillcard.cmds
 
 import com.github.tivecs.skillcard.gui.admin.mutateskill.MutateSkillMenu
+import com.github.tivecs.skillcard.internal.data.repositories.SkillRepository
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -76,7 +77,7 @@ class SkillCardAdminCommandTabCompleter : TabCompleter {
 
         if (args.size == 3 && args[0] == "skill") {
             if (args[1] == "get" || args[1] == "delete" || args[1] == "edit") {
-                val skillIdentifiers = SkillRepository.getAllIdentifiers()
+                val skillIdentifiers = SkillRepository.findAllIdentifiers()
 
                 StringUtil.copyPartialMatches(args[2] ?: "", skillIdentifiers, completions)
 

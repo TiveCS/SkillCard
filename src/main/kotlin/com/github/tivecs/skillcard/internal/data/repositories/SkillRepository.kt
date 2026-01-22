@@ -33,6 +33,10 @@ object SkillRepository {
         return skill
     }
 
+    fun findAllIdentifiers(): List<String> {
+        return cached.keys.toList()
+    }
+
     fun loadAll() {
 
     }

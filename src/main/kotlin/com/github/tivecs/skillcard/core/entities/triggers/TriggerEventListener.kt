@@ -2,9 +2,7 @@ package com.github.tivecs.skillcard.core.entities.triggers
 
 import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.builtin.abilities.DashAbility
-import com.github.tivecs.skillcard.core.builtin.abilities.DashAbilityAttribute
 import com.github.tivecs.skillcard.core.builtin.abilities.DashAbilityDirection
-import com.github.tivecs.skillcard.core.builtin.abilities.ThunderAbility
 import com.github.tivecs.skillcard.core.builtin.triggers.OnAttackTrigger
 import com.github.tivecs.skillcard.core.entities.abilities.Ability
 import com.github.tivecs.skillcard.core.entities.abilities.AbilityAttribute
@@ -18,13 +16,13 @@ import org.bukkit.event.Event
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
-import java.util.UUID
+import java.util.*
 
 @Suppress("UNCHECKED_CAST")
 class TriggerEventListener : Listener {
 
     companion object {
-        val onDamageTrigger = OnAttackTrigger()
+        val onDamageTrigger = OnAttackTrigger
 
         val testSkill = Skill().apply {
             identifier = "test_skill"
@@ -40,7 +38,7 @@ class TriggerEventListener : Listener {
 
             targetSlots.add(targetSlot1)
 
-            val testAbility = DashAbility()
+            val testAbility = DashAbility
 
             val testSkillAbility = SkillAbility().apply {
                 abilityIdentifier = testAbility.identifier

@@ -6,6 +6,7 @@ import com.github.tivecs.skillcard.gui.admin.common.items.OpenSelectAbilityMenuI
 import com.github.tivecs.skillcard.gui.admin.mutateskill.items.OpenSkillTargetSlotListMenuItem
 import com.github.tivecs.skillcard.gui.common.items.OpenInputStringMenuItem
 import com.github.tivecs.skillcard.gui.common.items.OpenSelectMaterialMenuItem
+import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import xyz.xenondevs.invui.gui.Gui
@@ -32,6 +33,7 @@ object MutateSkillMenu {
                 displayName = "&eSet Identifier",
                 material = XMaterial.OAK_SIGN.get() ?: Material.OAK_SIGN,
                 title = "Skill Identifier",
+                lores = listOf(" ", "&7Must be unique among all skills.", " ", "&eCurrent: &f${builder.identifier}"),
                 initialValue = builder.identifier,
                 onRename = { input -> builder.setIdentifier(input) },
                 onConfirm = { _, _, _ ->
@@ -53,6 +55,7 @@ object MutateSkillMenu {
                 material = XMaterial.WRITTEN_BOOK.get() ?: Material.WRITTEN_BOOK,
                 title = "Skill Description",
                 initialValue = builder.description ?: "",
+                lores = listOf(" ") + builder.getDescriptionDisplay(),
                 onRename = { input -> builder.setDescription(input) },
                 onConfirm = { _, _, _ ->
                     open(viewer)
@@ -60,6 +63,8 @@ object MutateSkillMenu {
             ))
             .addIngredient('4', OpenSelectMaterialMenuItem(
                 displayText = "&bSkill Material",
+                material = builder.material,
+                lores = listOf(" ", "&7Select the material as display item.", " ", "&bCurrent: &f${builder.material.name}"),
                 onSelect = { newMaterial ->
                     builder.setMaterial(newMaterial)
                     open(viewer)

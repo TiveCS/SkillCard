@@ -12,7 +12,12 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.AbstractItem
 import java.util.function.Consumer
 
-class OpenSelectMaterialMenuItem(val displayText: String, val onSelect: Consumer<XMaterial>) : AbstractItem() {
+class OpenSelectMaterialMenuItem(
+    val material: XMaterial? = null,
+    val lores: List<String> = emptyList(),
+    val displayText: String,
+    val onSelect: Consumer<XMaterial>
+) : AbstractItem() {
     override fun handleClick(
         clickType: ClickType,
         player: Player,
@@ -22,7 +27,8 @@ class OpenSelectMaterialMenuItem(val displayText: String, val onSelect: Consumer
     }
 
     override fun getItemProvider(): ItemProvider {
-        return ItemBuilder(Material.GRASS_BLOCK)
+        return ItemBuilder(material?.get() ?: Material.GRASS_BLOCK)
             .setDisplayName(displayText.colorized())
+            .setLegacyLore(lores.map { it.colorized() })
     }
 }

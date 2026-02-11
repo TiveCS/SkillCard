@@ -12,7 +12,8 @@ import xyz.xenondevs.invui.window.Window
 
 object SkillTargetSlotListMenu {
 
-    fun open(viewer: Player, skillBuilder: SkillBuilder, searchText: String = "") {
+    fun
+            open(viewer: Player, skillBuilder: SkillBuilder, searchText: String = "") {
         var search = searchText
 
         val gui = PagedGui.items()
@@ -31,7 +32,9 @@ object SkillTargetSlotListMenu {
                 onRename = { input -> search = input },
                 onConfirm = { _, _, _ -> open(viewer, skillBuilder, search )},
             ))
-            .addIngredient('B', OpenMutateSkillMenuItem())
+            .addIngredient('B', OpenMutateSkillMenuItem(
+                displayText = "&eBack to Mutate Skill Menu",
+            ))
             .build()
 
         val window = Window.single().setGui(gui).setViewer(viewer).build()

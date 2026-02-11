@@ -17,18 +17,20 @@ object TriggerRepository {
             registeredTriggers[trigger.identifier] = trigger
 
             // Extract event class from Trigger<TEvent, TAttribute> generic parameter using reflection
-            val triggerInterface = trigger.javaClass.genericInterfaces
-                .filterIsInstance<ParameterizedType>()
-                .firstOrNull { (it.rawType as? Class<*>)?.name?.contains("Trigger") == true }
-
-            if (triggerInterface != null) {
-                @Suppress("UNCHECKED_CAST")
-                val eventClass = triggerInterface.actualTypeArguments[0] as Class<out Event>
-                val existing = groupedTriggersByEvent[eventClass] ?: emptyList()
-                groupedTriggersByEvent[eventClass] = existing + trigger
-            } else {
-                throw IllegalStateException("Could not extract event class from trigger '${trigger.identifier}'")
-            }
+//            val genericInterfaces = trigger.javaClass.genericInterfaces;
+//
+//            val triggerInterface = trigger.javaClass.genericInterfaces
+//                .filterIsInstance<ParameterizedType>()
+//                .firstOrNull { (it.rawType as? Class<*>)?.name?.contains("Trigger") == true }
+//
+//            if (triggerInterface != null) {
+//                @Suppress("UNCHECKED_CAST")
+//                val eventClass = triggerInterface.actualTypeArguments[0] as Class<out Event>
+//                val existing = groupedTriggersByEvent[eventClass] ?: emptyList()
+//                groupedTriggersByEvent[eventClass] = existing + trigger
+//            } else {
+//                throw IllegalStateException("Could not extract event class from trigger '${trigger.identifier}'")
+//            }
         }
     }
 }

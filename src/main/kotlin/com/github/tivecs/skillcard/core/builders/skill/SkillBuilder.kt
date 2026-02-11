@@ -4,6 +4,7 @@ import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.entities.skills.Skill
 import com.github.tivecs.skillcard.core.entities.skills.SkillAbility
 import com.github.tivecs.skillcard.core.entities.skills.SkillTargetSlot
+import com.github.tivecs.skillcard.internal.extensions.colorized
 
 class SkillBuilder {
 
@@ -51,6 +52,13 @@ class SkillBuilder {
     fun setDisplayName(name: String): SkillBuilder {
         this.displayName = name
         return this
+    }
+
+    fun getDescriptionDisplay(): List<String> {
+        return when (description) {
+            null, "" -> emptyList()
+            else -> description!!.split("\n").map { it.colorized() }
+        }
     }
 
     fun newTargetSlotBuilder(): SkillTargetSlotBuilder {

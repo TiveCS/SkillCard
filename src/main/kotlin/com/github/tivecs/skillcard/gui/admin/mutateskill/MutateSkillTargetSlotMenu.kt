@@ -29,6 +29,7 @@ object MutateSkillTargetSlotMenu {
                 displayName = "&eSet Slot Identifier",
                 material = XMaterial.ARROW.get() ?: Material.ARROW,
                 title = "Slot Identifier",
+                lores = listOf(" ", "&7Must be unique among all target slots.", " ", "&eCurrent: &f${builder.slotIdentifier}"),
                 initialValue = builder.slotIdentifier,
                 onRename = { input -> builder.setSlotIdentifier(input) },
                 onConfirm = { _, _, _ ->

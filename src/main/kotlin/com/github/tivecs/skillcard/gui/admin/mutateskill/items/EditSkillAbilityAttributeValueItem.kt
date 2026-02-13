@@ -91,13 +91,15 @@ class EditSkillAbilityAttributeValueItem<TValue : Any>(
     }
 
     override fun getItemProvider(): ItemProvider {
-        val result = ItemBuilder(Material.BRICK).setDisplayName("&e${requirement.key}")
+        val result = ItemBuilder(Material.BRICK).setDisplayName("&e${requirement.key}".colorized())
 
         if (!requirement.description.isNullOrBlank()) {
             result.addLoreLines(" ", requirement.description.colorized())
         }
 
-        result.addLoreLines(" ", "&fCurrent Value: ${abilityBuilder.attributes.getOrDefault(requirement.key, "-")}")
+        result.addLoreLines(
+            " ",
+            "&fCurrent Value: ${abilityBuilder.attributes.getOrDefault(requirement.key, "-")}".colorized())
 
         return result
     }

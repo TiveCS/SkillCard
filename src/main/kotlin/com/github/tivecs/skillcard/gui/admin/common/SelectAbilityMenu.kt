@@ -2,8 +2,10 @@ package com.github.tivecs.skillcard.gui.admin.common
 
 import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.entities.abilities.Ability
+import com.github.tivecs.skillcard.gui.admin.common.items.AbilitySelectionOptionItem
 import com.github.tivecs.skillcard.gui.common.items.BorderGuiItem
 import com.github.tivecs.skillcard.gui.common.items.OpenInputStringMenuItem
+import com.github.tivecs.skillcard.internal.data.repositories.AbilityRepository
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import xyz.xenondevs.invui.gui.ScrollGui
@@ -17,12 +19,19 @@ object SelectAbilityMenu {
     fun open(viewer: Player, onSelect: Consumer<Ability<*>>, searchText: String = "", backItem: AbstractItem? = null) {
         var search = searchText
 
+        val registeredAbilities = AbilityRepository.getAllAbilities().map {
+            AbilitySelectionOptionItem(
+                ability = it,
+                onSelect = onSelect
+            )
+        }
+
         val gui = ScrollGui.items()
             .setStructure(
                 "xxxxxxxxB",
-                "xxxxxxxx<",
+                "xxxxxxxx^",
                 "xxxxxxxxS",
-                "xxxxxxxx>",
+                "xxxxxxxxv",
                 "xxxxxxxx#",
             )
             .addIngredient('x', Markers.CONTENT_LIST_SLOT_VERTICAL)
@@ -37,6 +46,7 @@ object SelectAbilityMenu {
                     onConfirm = { _, _, _ -> open(viewer, onSelect, search) },
                 )
             )
+            .setContent(registeredAbilities)
             .build()
 
         val window = Window.single().setGui(gui).setViewer(viewer).build()

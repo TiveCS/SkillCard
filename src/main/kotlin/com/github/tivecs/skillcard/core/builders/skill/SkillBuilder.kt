@@ -1,6 +1,7 @@
 ﻿package com.github.tivecs.skillcard.core.builders.skill
 
 import com.cryptomorin.xseries.XMaterial
+import com.github.tivecs.skillcard.core.entities.abilities.Ability
 import com.github.tivecs.skillcard.core.entities.skills.Skill
 import com.github.tivecs.skillcard.core.entities.skills.SkillAbility
 import com.github.tivecs.skillcard.core.entities.skills.SkillTargetSlot
@@ -70,6 +71,12 @@ class SkillBuilder {
     fun newAbilityBuilder(): SkillAbilityBuilder {
         val builder = SkillAbilityBuilder(this)
         abilityBuilder = builder
+        return builder
+    }
+
+    fun newUnattachedAbilityBuilder(ability: Ability<*>): SkillAbilityBuilder {
+        val builder = SkillAbilityBuilder(this)
+        builder.setAbility(ability)
         return builder
     }
 

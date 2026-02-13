@@ -1,5 +1,6 @@
 package com.github.tivecs.skillcard.gui.admin.mutateskill.items
 
+import com.cryptomorin.xseries.XMaterial
 import com.github.tivecs.skillcard.core.builders.skill.SkillAbilityBuilder
 import com.github.tivecs.skillcard.gui.admin.mutateskill.MutateSkillAbilityAttributesMenu
 import com.github.tivecs.skillcard.internal.extensions.colorized
@@ -13,7 +14,8 @@ import xyz.xenondevs.invui.item.impl.AbstractItem
 
 class OpenMutateSkillAbilityAttributesMenuItem(
     val displayText: String = "&cEdit Skill Ability Attributes",
-    val abilityBuilder: SkillAbilityBuilder
+    val abilityBuilder: SkillAbilityBuilder,
+    val material: XMaterial = XMaterial.RED_BANNER
 ) : AbstractItem() {
 
     override fun handleClick(
@@ -25,6 +27,9 @@ class OpenMutateSkillAbilityAttributesMenuItem(
     }
 
     override fun getItemProvider(): ItemProvider {
-        return ItemBuilder(Material.RED_BANNER).setDisplayName(displayText.colorized())
+        val mat = material.get() ?: Material.RED_BANNER
+
+        return ItemBuilder(mat)
+            .setDisplayName(displayText.colorized())
     }
 }

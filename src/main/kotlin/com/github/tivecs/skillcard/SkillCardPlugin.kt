@@ -9,6 +9,8 @@ import com.github.tivecs.skillcard.core.entities.triggers.TriggerEventListener
 import com.github.tivecs.skillcard.gui.common.items.BorderGuiItem
 import com.github.tivecs.skillcard.gui.common.items.NextPageGuiItem
 import com.github.tivecs.skillcard.gui.common.items.PreviousPageGuiItem
+import com.github.tivecs.skillcard.gui.common.items.ScrollDownItem
+import com.github.tivecs.skillcard.gui.common.items.ScrollUpItem
 import com.github.tivecs.skillcard.internal.config.SkillCardConfig
 import com.github.tivecs.skillcard.internal.data.SkillCardDatabase
 import com.github.tivecs.skillcard.internal.data.repositories.AbilityRepository
@@ -47,6 +49,8 @@ class SkillCardPlugin : JavaPlugin() {
         Structure.addGlobalIngredient('#', BorderGuiItem)
         Structure.addGlobalIngredient('>', ::NextPageGuiItem)
         Structure.addGlobalIngredient('<', ::PreviousPageGuiItem)
+        Structure.addGlobalIngredient('^', ::ScrollUpItem)
+        Structure.addGlobalIngredient('v', ::ScrollDownItem)
     }
 
     override fun onDisable() {

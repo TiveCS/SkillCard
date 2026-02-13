@@ -5,14 +5,26 @@ import com.github.tivecs.skillcard.gui.admin.common.items.OpenSelectAbilityMenuI
 import com.github.tivecs.skillcard.gui.admin.mutateskill.items.OpenMutateSkillAbilityAttributesMenuItem
 import com.github.tivecs.skillcard.gui.admin.mutateskill.items.OpenMutateSkillMenuItem
 import com.github.tivecs.skillcard.gui.admin.mutateskill.items.OpenSkillAbilityListMenuItem
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import xyz.xenondevs.invui.gui.PagedGui
+import xyz.xenondevs.invui.gui.structure.Markers
+import xyz.xenondevs.invui.item.Item
+import xyz.xenondevs.invui.item.builder.ItemBuilder
+import xyz.xenondevs.invui.item.impl.SimpleItem
 import xyz.xenondevs.invui.window.Window
 
 object SkillAbilityListMenu {
 
     fun open(viewer: Player, skillBuilder: SkillBuilder) {
         val abilityBuilder = skillBuilder.abilityBuilder ?: skillBuilder.newAbilityBuilder()
+
+        val registeredAbilities = skillBuilder.abilities.map {
+            OpenMutateSkillAbilityAttributesMenuItem(
+                displayText = "&aEdit ${it.ability.displayName} Attributes",
+                abilityBuilder = skillBuilder.newUnattachedAbilityBuilder(it.ability)
+            )
+        }
 
         val gui = PagedGui.items()
             .setStructure(
@@ -23,6 +35,7 @@ object SkillAbilityListMenu {
                 "####+####",
                 "-B--R--C-"
             )
+            .addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL)
             .addIngredient(
                 '+', when (abilityBuilder.ability) {
                     null -> OpenSelectAbilityMenuItem(
@@ -43,6 +56,7 @@ object SkillAbilityListMenu {
                 }
             )
             .addIngredient('B', OpenMutateSkillMenuItem("&eBack to Skill Manage Menu"))
+            .setContent(registeredAbilities)
             .build()
 
         val window = Window.single().setGui(gui).setViewer(viewer).build()

@@ -79,12 +79,15 @@ class TriggerEventListener : Listener {
 
             skillSets.add(testSkillSet)
         }
+
+        var createdSkill: SkillBook? = null
     }
 
     @EventHandler
     fun onDamageTriggerHandler(event: EntityDamageByEntityEvent) {
         val triggerResult = onDamageTrigger.handle(event)
 
-        skillBook.execute(triggerResult)
+//        skillBook.execute(triggerResult)
+        createdSkill?.execute(triggerResult)
     }
 }

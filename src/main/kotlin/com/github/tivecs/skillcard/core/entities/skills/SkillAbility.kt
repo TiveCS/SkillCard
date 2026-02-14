@@ -20,7 +20,7 @@ class SkillAbility {
 
     val attributes = mutableMapOf<String, Any>()
 
-    lateinit var skill: Skill
+    var skill: Skill? = null
     lateinit var ability: Ability<AbilityAttribute>
     lateinit var targetSlot: SkillTargetSlot
 

@@ -16,6 +16,11 @@ class TriggerSkillSet(val triggerSkillSetId: UUID) {
 
     lateinit var trigger: Trigger<Event>
 
+    fun registerTargetSlotSource(source: TriggerTargetSlotSource) {
+        targetSlotSources.add(source)
+        source.triggerSkillSet = this
+    }
+
     fun getSkillTargetSlots(skillIdentifier: String): List<TriggerTargetSlotSource> {
         return targetSlotSources.filter { it.skillIdentifier == skillIdentifier }
     }

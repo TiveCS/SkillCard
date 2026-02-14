@@ -31,6 +31,13 @@ class SkillCardAdminCommand : CommandExecutor {
             return true
         }
 
+        if (args[0] == "resetdraft") {
+            if (sender is Player) {
+                MutateSkillMenu.invalidate(sender)
+            }
+            return true
+        }
+
         if (args[0] == "help" || args[0] == "?") {
             sender.sendMessage("&cSkillCard Admin Command Help".colorized())
             sender.sendMessage(" ")
@@ -54,7 +61,7 @@ class SkillCardAdminCommandTabCompleter : TabCompleter {
             return null
 
         if (args.size == 1) {
-            val suggestions = listOf("help", "?", "skill", "manage")
+            val suggestions = listOf("help", "?", "skill", "manage", "resetdraft")
 
             if (args[0] != null) {
                 StringUtil.copyPartialMatches(args[0]!!, suggestions, completions)

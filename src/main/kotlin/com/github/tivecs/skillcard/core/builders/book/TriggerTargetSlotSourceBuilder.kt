@@ -22,26 +22,31 @@ class TriggerTargetSlotSourceBuilder {
     fun validate(): List<String> {
         val errors = mutableListOf<String>()
 
-        if (target == null) {
+        val currentTargetSlot = skillTargetSlot
+        val currentTarget = target
+        val currentTargetSlotTargetType = currentTargetSlot?.targetType
+
+        if (currentTarget == null) {
             errors.add("Target key is required")
         }
 
-        if (skillTargetSlot == null) {
+        if (currentTarget == null) {
             errors.add("Target slot is required")
         }
 
-        val currentTargetSlot = skillTargetSlot
-        val currentTarget = target
+        if (currentTargetSlotTargetType == null) {
+            errors.add("Target slot target type is required")
+        }
 
-        if (currentTargetSlot != null && currentTarget != null) {
+        if (currentTargetSlot != null && currentTarget != null && currentTargetSlotTargetType != null) {
             val outputType = currentTarget.outputType
-            val acceptableSourceTypes = TypeConverters.getAcceptableSourceTypes(currentTargetSlot.targetType)
+            val acceptableSourceTypes = TypeConverters.getAcceptableSourceTypes(currentTargetSlotTargetType)
             val isValid = acceptableSourceTypes.any {
                 it == outputType || TODO("add checking for 'outputType' assignable to 'it' type")
             }
 
             if (!isValid) {
-                errors.add("Target slot of '${currentTargetSlot.identifier} (${currentTargetSlot.targetType.simpleName})' value type is incompatible with '${currentTarget.key} (${currentTarget.outputType.simpleName})'")
+                errors.add("Target slot of '${currentTargetSlot.identifier} (${currentTargetSlotTargetType.simpleName})' value type is incompatible with '${currentTarget.key} (${currentTarget.outputType.simpleName})'")
             }
         }
 

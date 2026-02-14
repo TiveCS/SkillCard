@@ -7,7 +7,7 @@ class SkillTargetSlot(val identifier: String) {
     lateinit var skillIdentifier: String
 
     lateinit var skill: Skill
-    lateinit var targetType: KClass<*>
+    var targetType: KClass<*>? = null
     lateinit var targetAbilities: List<SkillAbility>
 
 }

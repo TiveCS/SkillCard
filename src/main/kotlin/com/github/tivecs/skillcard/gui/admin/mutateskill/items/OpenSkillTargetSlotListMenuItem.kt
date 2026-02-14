@@ -1,6 +1,7 @@
 package com.github.tivecs.skillcard.gui.admin.mutateskill.items
 
 import com.github.tivecs.skillcard.core.builders.skill.SkillBuilder
+import com.github.tivecs.skillcard.core.entities.skills.SkillTargetSlot
 import com.github.tivecs.skillcard.gui.admin.mutateskill.SkillTargetSlotListMenu
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
@@ -13,7 +14,8 @@ import xyz.xenondevs.invui.item.impl.AbstractItem
 
 class OpenSkillTargetSlotListMenuItem(
     val displayText: String = "&eSkill Target Slot List",
-    val skillBuilder: SkillBuilder
+    val skillBuilder: SkillBuilder,
+    val onItemClick: ((player: Player, skillBuilder: SkillBuilder, targetSlot: SkillTargetSlot) -> Unit) = { _, _, _ -> }
 ) : AbstractItem() {
 
     override fun handleClick(
@@ -21,7 +23,12 @@ class OpenSkillTargetSlotListMenuItem(
         player: Player,
         event: InventoryClickEvent
     ) {
-        SkillTargetSlotListMenu.open(player, skillBuilder)
+        SkillTargetSlotListMenu.open(
+            viewer = player,
+            skillBuilder = skillBuilder,
+            disableCreate = false,
+            onItemClick = onItemClick
+        )
     }
 
     override fun getItemProvider(): ItemProvider {

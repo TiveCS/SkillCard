@@ -31,5 +31,6 @@ class OpenMutateSkillAbilityAttributesMenuItem(
 
         return ItemBuilder(mat)
             .setDisplayName(displayText.colorized())
+            .addLoreLines(" ", "&fClick to continue edit '${abilityBuilder.abilityIdentifier}' ability".colorized())
     }
 }

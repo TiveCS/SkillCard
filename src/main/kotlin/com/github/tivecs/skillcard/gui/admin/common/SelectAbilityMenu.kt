@@ -34,7 +34,7 @@ object SelectAbilityMenu {
                 "xxxxxxxxv",
                 "xxxxxxxx#",
             )
-            .addIngredient('x', Markers.CONTENT_LIST_SLOT_VERTICAL)
+            .addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL)
             .addIngredient('B', backItem ?: BorderGuiItem)
             .addIngredient(
                 'S', OpenInputStringMenuItem(

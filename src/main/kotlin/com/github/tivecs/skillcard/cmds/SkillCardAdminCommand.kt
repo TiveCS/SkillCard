@@ -1,6 +1,7 @@
 package com.github.tivecs.skillcard.cmds
 
 import com.github.tivecs.skillcard.gui.admin.mutateskill.MutateSkillMenu
+import com.github.tivecs.skillcard.gui.admin.mutateskillbook.MutateSkillBookMenu
 import com.github.tivecs.skillcard.internal.data.repositories.SkillRepository
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.command.Command
@@ -38,6 +39,18 @@ class SkillCardAdminCommand : CommandExecutor {
             return true
         }
 
+        if (args[0] == "book") {
+            if (sender is Player) {
+                MutateSkillBookMenu.open(sender)
+            }
+        }
+
+        if (args[0] == "resetdraftbook") {
+            if (sender is Player) {
+                MutateSkillBookMenu.invalidate(sender)
+            }
+        }
+
         if (args[0] == "help" || args[0] == "?") {
             sender.sendMessage("&cSkillCard Admin Command Help".colorized())
             sender.sendMessage(" ")
@@ -61,7 +74,7 @@ class SkillCardAdminCommandTabCompleter : TabCompleter {
             return null
 
         if (args.size == 1) {
-            val suggestions = listOf("help", "?", "skill", "manage", "resetdraft")
+            val suggestions = listOf("help", "?", "skill", "manage", "resetdraft", "book", "resetdraftbook")
 
             if (args[0] != null) {
                 StringUtil.copyPartialMatches(args[0]!!, suggestions, completions)

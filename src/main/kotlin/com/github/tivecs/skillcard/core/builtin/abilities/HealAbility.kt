@@ -7,8 +7,10 @@ import com.github.tivecs.skillcard.core.entities.abilities.AbilityExecuteResultS
 import com.github.tivecs.skillcard.core.entities.abilities.AbilityRequirement
 import com.github.tivecs.skillcard.core.entities.abilities.RequirementSource
 import com.github.tivecs.skillcard.core.entities.triggers.TriggerExecutionResult
+import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Event
+import kotlin.math.max
 
 data class HealAbilityAttribute(
     val target: LivingEntity,
@@ -37,7 +39,18 @@ object HealAbility : Ability<HealAbilityAttribute> {
     )
 
     override fun execute(attribute: HealAbilityAttribute?): AbilityExecuteResultState {
-        TODO("Not yet implemented")
+        if (attribute == null) return AbilityExecuteResultState.INVALID_ATTRIBUTE
+
+        val target = attribute.target
+        val amount = attribute.amount
+
+        if (target.isDead) return AbilityExecuteResultState.CONDITION_NOT_MET
+
+        val maxHealth = target.getAttribute(Attribute.GENERIC_MAX_HEALTH)?.value ?: return AbilityExecuteResultState.CONDITION_NOT_MET
+        val newHealth = (target.health + amount).coerceAtMost(maxHealth)
+        target.health = newHealth
+
+        return AbilityExecuteResultState.EXECUTED
     }
 
     override fun <TEvent : Event> createAttribute(

@@ -1,14 +1,21 @@
 package com.github.tivecs.skillcard.internal.data.repositories
 
 import com.github.tivecs.skillcard.core.entities.skills.Skill
-import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
 object SkillRepository {
 
     val cached = mutableMapOf<String, Skill>()
 
-    fun create(skill: Skill) {
+    fun create(skill: Skill, saveToDatabase: Boolean = true) {
+        if (cached.containsKey(skill.identifier)) {
+            throw IllegalArgumentException("Skill with identifier ${skill.identifier} already exists.")
+        }
 
+        if (saveToDatabase) {
+
+        }else {
+            cached[skill.identifier] = skill
+        }
     }
 
     fun update(skill: Skill) {

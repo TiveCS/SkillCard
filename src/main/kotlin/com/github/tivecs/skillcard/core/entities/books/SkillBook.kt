@@ -6,7 +6,7 @@ import com.github.tivecs.skillcard.core.entities.triggers.TriggerExecutionResult
 
 class SkillBook {
 
-    lateinit var name: String
+    lateinit var identifier: String
     lateinit var displayName: String
     lateinit var description: String
     lateinit var material: XMaterial

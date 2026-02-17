@@ -5,9 +5,11 @@ import com.github.tivecs.skillcard.core.entities.skills.SkillTargetSlot
 import com.github.tivecs.skillcard.core.entities.triggers.TriggerExecutionResult
 import com.github.tivecs.skillcard.core.entities.triggers.TriggerExecutionResultStatus
 
-class TriggerTargetSlotSource(val targetSlotIdentifier: String, val skillIdentifier: String) {
-
-    lateinit var targetKey: String
+class TriggerTargetSlotSource(
+    val targetSlotIdentifier: String,
+    val skillIdentifier: String,
+    var targetKey: String
+) {
 
     lateinit var triggerSkillSet: TriggerSkillSet
 

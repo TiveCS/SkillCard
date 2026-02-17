@@ -8,20 +8,19 @@ import com.github.tivecs.skillcard.core.entities.books.TriggerSkillSet
 import com.github.tivecs.skillcard.core.entities.books.TriggerTargetSlotSource
 import com.github.tivecs.skillcard.core.entities.triggers.Trigger
 import com.github.tivecs.skillcard.core.entities.triggers.TriggerEventListener
-import com.github.tivecs.skillcard.core.entities.triggers.TriggerEventListener.Companion.testSkill
-import com.github.tivecs.skillcard.gui.admin.common.items.OpenSelectAbilityMenuItem
+import com.github.tivecs.skillcard.gui.admin.lobby.AdminLobbyMenu
 import com.github.tivecs.skillcard.gui.admin.mutateskill.items.ConfirmCreateSkillItem
 import com.github.tivecs.skillcard.gui.admin.mutateskill.items.OpenSkillAbilityListMenuItem
 import com.github.tivecs.skillcard.gui.admin.mutateskill.items.OpenSkillTargetSlotListMenuItem
 import com.github.tivecs.skillcard.gui.common.items.OpenInputStringMenuItem
 import com.github.tivecs.skillcard.gui.common.items.OpenSelectMaterialMenuItem
-import com.github.tivecs.skillcard.internal.extensions.colorized
+import com.github.tivecs.skillcard.internal.data.repositories.SkillRepository
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.window.Window
-import java.util.UUID
+import java.util.*
 
 object MutateSkillMenu {
 
@@ -110,31 +109,10 @@ object MutateSkillMenu {
                     skillBuilder = builder
                 )
             )
-            .addIngredient('C', ConfirmCreateSkillItem(builder) { newSkill ->
+            .addIngredient('C', ConfirmCreateSkillItem(builder) { skill ->
                 invalidate(viewer)
-                TriggerEventListener.createdSkill = SkillBook().apply {
-
-                    val triggerTargetSlotSource = TriggerTargetSlotSource(
-                        skillIdentifier = newSkill.identifier,
-                        targetSlotIdentifier = newSkill.targetSlots[0].identifier
-                    ).apply {
-                        skill = newSkill
-                        targetSlot = testSkill.targetSlots[0]
-                        targetKey = OnAttackTrigger.AVAILABLE_TARGET_ATTACKER
-                    }
-
-                    val skillSets = TriggerSkillSet(
-                        triggerSkillSetId = UUID.randomUUID()
-                    ).apply {
-                        triggerIdentifier = OnAttackTrigger.identifier
-                        trigger = OnAttackTrigger as Trigger<Event>
-                    }
-
-                    skillSets.skills.add(newSkill)
-                    skillSets.registerTargetSlotSource(triggerTargetSlotSource)
-
-                    this.skillSets.add(skillSets)
-                }
+                SkillRepository.create(skill, false)
+                AdminLobbyMenu.open(viewer)
             })
             .build()
 

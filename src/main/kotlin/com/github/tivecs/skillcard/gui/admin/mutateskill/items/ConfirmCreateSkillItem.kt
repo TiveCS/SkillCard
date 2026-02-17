@@ -3,6 +3,7 @@ package com.github.tivecs.skillcard.gui.admin.mutateskill.items
 import com.github.tivecs.skillcard.core.builders.skill.SkillBuilder
 import com.github.tivecs.skillcard.core.entities.skills.Skill
 import com.github.tivecs.skillcard.gui.admin.mutateskill.MutateSkillMenu
+import com.github.tivecs.skillcard.internal.data.repositories.SkillRepository
 import com.github.tivecs.skillcard.internal.extensions.colorized
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -28,8 +29,6 @@ class ConfirmCreateSkillItem(
         if (errors.isNotEmpty()) return
 
         val skill = builder.build()
-
-        MutateSkillMenu.invalidate(player)
         onPostCreate.invoke(skill)
     }
 
